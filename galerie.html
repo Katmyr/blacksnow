@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie ❅ BLACKSNOW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="scanlines">
+    <!-- Snowflakes -->
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
+            <span class="material-icons">
+                close
+                </span>
+        </button>
+        <div class="flex flex-col items-center space-y-8 text-2xl">
+            <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+            <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
+            <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
+            <a href="#donate" class="px-6 py-2 bg-black border-2 text-neon-pink font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">DONATE</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b-2">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+                    <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+                    <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+                    <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+                    <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
+                    <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
+                    <a href="#donate" class="whitespace-nowrap px-4 py-2 bg-black border-2 font-bold transition duration-300">NOUS SOUTENIR</a>
+                </div>
+            
+            </div>
+        </div>
+    </nav>
+       <!-- Gallery Section -->
+       <section id="gallery" class="py-20 bg-black y2k-grid-bg border-t-2">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 neon-text-pink y2k-font pt-10" data-text="GALLERY">
+                    Galerie photo
+                </h2>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">
+                    Souvenirs de tournages et d'événements
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-64">
+                    <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-blue flex items-center justify-center hover:bg-neon-blue transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 2 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 h-64">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 flex items-center justify-center hover:bg-neon-pink transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 3 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-green h-64">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-green flex items-center justify-center hover:bg-neon-green transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 4 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-yellow h-64">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-yellow flex items-center justify-center hover:bg-neon-yellow transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 5 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-purple h-64">
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-purple flex items-center justify-center hover:bg-neon-purple transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 6 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-64">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27d1b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Gallery Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
+                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-blue flex items-center justify-center hover:bg-neon-blue transition duration-300">
+                            <span class="material-icons">
+                                fullscreen
+                                </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-left">
+          <p>© 2025 BLACKSNOW. Tous droits réservés</p>
+          <p><a href="cgu.html">Mentions légales</a> · <a href="contact.html">Contact</a></p>
+        </div>
+        <div class="footer-right flex space-x-4 text-2xl">
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
+              <i class="fab fa-facebook"></i>
+            </a>
+          </div>
+          
+    </footer>
+</body>
+</html>

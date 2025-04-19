@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil ❅ BLACKSNOW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="scanlines">
+    <!-- Snowflakes -->
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
+            <span class="material-icons">
+                close
+                </span>
+        </button>
+        <div class="flex flex-col items-center space-y-8 text-2xl">
+            <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+            <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
+            <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
+            <a href="#donate" class="px-6 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">DONATE</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b-2">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+                    <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+                    <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+                    <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+                    <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
+                    <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:text-neon-blue transition duration-300">CONTACT</a>
+                    <a href="#donate" class="whitespace-nowrap px-4 py-2 bg-black border-2 font-bold transition duration-300">NOUS SOUTENIR</a>
+                </div>
+            
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-black y2k-grid-bg">
+        <div class="absolute inset-0"></div>
+        <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover -z-10">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-under-neon-lights-1230-large.mp4" type="video/mp4">
+        </video>
+        
+        <div class="container mx-auto px-6 z-10 text-center">
+            <img src="logo.svg" class="logo-hero" alt="logo">
+            <p class="text-xl md:text-3xl mb-10 max-w-3xl mx-auto text-gray-300 font-bold">
+                CREW DE DANSE K-POP
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="videos.html" class="px-10 py-4 bg-black border-2 font-bold text-lg hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
+                    <span class="material-icons">
+                        ondemand_video
+                        </span> NOS VIDEOS
+                </a>
+                <a href="news.html" class="px-10 py-4 bg-black border-2 border-neon-blue text-neon-blue font-bold text-lg hover hover transition duration-300 y2k-btn">
+                    <span class="material-icons">
+                        event
+                        </span> PROCHAINS ÉVÉNEMENTS
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center">
+            <a href="#about" class="animate-bounce">
+                <div class="w-10 h-10 border-2 rounded-full flex items-center justify-center">
+                    <span class="material-icons">
+                        expand_more
+                        </span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-black y2k-grid-bg">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 y2k-font glitch" data-text="OUR STORY">
+                    Qui sommes-nous ?
+                </h2>
+                <div class="w-full h-1 bg-gradient-to-r from-neon-blue via-neon-pink to-neon-yellow my-6"></div>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <div class="relative rounded-lg overflow-hidden border-2 border-neon-blue">
+                        <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Notre Crew" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <h3 class="text-3xl font-bold neon-text-pink">SINCE 2018</h3>
+                            <p class="text-neon-blue">WE BRING Y2K TO K-POP</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <p class="text-gray-300 mb-8 text-xl">
+                        BLACKSNOW est un crew de danse K-Pop fondé en 2018.
+                    </p>
+                    <h3 class="text-4xl font-bold mb-6 neon-text-pink">BLACKSNOW en chiffres</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="y2k-card p-6 rounded-lg border-2">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-neon-pink rounded-full mr-3 animate-pulse"></div>
+                                <h4 class="text-xl font-bold text-white">MEMBRES</h4>
+                            </div>
+                            <p class="text-gray-400">9 membres motivées</p>
+                        </div>
+                        
+                        <div class="y2k-card p-6 rounded-lg border-2 border-neon-blue">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-neon-blue rounded-full mr-3 animate-pulse"></div>
+                                <h4 class="text-xl font-bold text-white">COMMUNAUTÉ</h4>
+                            </div>
+                            <p class="text-gray-400">+500 abonné.e.s sur nos réseaux</p>
+                        </div>
+                        
+                        <div class="y2k-card p-6 rounded-lg border-2 border-neon-yellow">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-neon-yellow rounded-full mr-3 animate-pulse"></div>
+                                <h4 class="text-xl font-bold text-white">COMPÉTITIONS</h4>
+                            </div>
+                            <p class="text-gray-400">5 COMPETITIONS WON IN KPOP STYLE</p>
+                        </div>
+                        
+                        <div class="y2k-card p-6 rounded-lg border-2 border-neon-purple">
+                            <div class="flex items-center mb-4">
+                                <div class="w-8 h-8 bg-neon-purple rounded-full mr-3 animate-pulse"></div>
+                                <h4 class="text-xl font-bold text-white">ÉVÉNEMENTS</h4>
+                            </div>
+                            <p class="text-gray-400">PERFORMED AT 12+ EVENTS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-left">
+          <p>© 2025 BLACKSNOW. Tous droits réservés</p>
+          <p><a href="cgu.html">Mentions légales</a> · <a href="contact.html">Contact</a></p>
+        </div>
+        <div class="footer-right flex space-x-4 text-2xl">
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
+              <i class="fab fa-facebook"></i>
+            </a>
+          </div>
+          
+    </footer>
+</body>
+</html>
