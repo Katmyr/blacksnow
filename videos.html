@@ -8,6 +8,62 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Lightbox overlay */
+        #yt-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+        #yt-modal.active {
+            display: flex;
+        }
+        #yt-modal .modal-inner {
+            position: relative;
+            width: 90vw;
+            max-width: 960px;
+            aspect-ratio: 16/9;
+        }
+        #yt-modal iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(157, 222, 255, 0.5);
+            box-shadow: 0 0 30px rgba(157, 222, 255, 0.3);
+        }
+        #yt-modal .close-btn {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        #yt-modal .close-btn:hover {
+            color: #9DDEFF;
+        }
+
+        /* Thumbnail cards */
+        .yt-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .y2k-card:hover .yt-thumb {
+            transform: scale(1.08);
+        }
+    </style>
 </head>
 <body class="scanlines">
     <!-- Snowflakes -->
@@ -18,21 +74,32 @@
     <div class="snowflake">❅</div>
     <div class="snowflake">❆</div>
     
+    <!-- YouTube Modal Lightbox -->
+    <div id="yt-modal">
+        <div class="modal-inner">
+            <button class="close-btn" id="modal-close">
+                <span class="material-icons" style="font-size:2rem;">close</span>
+            </button>
+            <iframe id="yt-iframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
         <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
-            <span class="material-icons">
-                close
-                </span>
+            <span class="material-icons">close</span>
         </button>
         <div class="flex flex-col items-center space-y-8 text-2xl">
             <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
             <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
             <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
             <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
-            <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
             <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
-            <a href="#donate" class="px-6 py-2 bg-black border-2 text-neon-pink font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">DONATE</a>
         </div>
     </div>
 
@@ -41,17 +108,13 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
                 <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
-                
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
                     <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
                     <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
                     <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
-                    <a href="galerie.html" class="text-white hover:neon-text-pink transition duration-300">GALERIE</a>
                     <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
-                    <a href="#donate" class="whitespace-nowrap px-4 py-2 bg-black border-2 font-bold transition duration-300">NOUS SOUTENIR</a>
                 </div>
-            
             </div>
         </div>
     </nav>
@@ -69,148 +132,145 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Performance 1 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 h-96">
+
+                <!-- Video 1 — Sgd0IBj2YJM -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 h-96 cursor-pointer"
+                     onclick="openVideo('Sgd0IBj2YJM')">
                     <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-dancing-doll-in-a-box-3980-large.mp4" type="video/mp4">
-                        </video>
+                        <img class="yt-thumb" 
+                             src="https://img.youtube.com/vi/Sgd0IBj2YJM/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/Sgd0IBj2YJM/hqdefault.jpg'"
+                             alt="Vidéo 1 BLACKSNOW">
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <div class="px-3 py-1 bg-neon-pink text-black text-xs font-bold rounded-full inline-block mb-2">
-                            NEW
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-Sgd0IBj2YJM">
+                        <div class="px-3 py-1 bg-neon-pink text-black text-xs font-bold rounded-full inline-block mb-2">NEW</div>
+                        <h3 class="text-xl font-bold neon-text-pink mb-1">Vidéo 1</h3>
+                        <p class="text-neon-blue text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-pink transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
                         </div>
-                        <h3 class="text-2xl font-bold neon-text-pink mb-1">"HYPE BOY" - NEWJEANS</h3>
-                        <p class="text-neon-blue">Y2K REMIX VERSION</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 flex items-center justify-center hover:bg-neon-pink transition duration-300">
-                            <span class="material-icons">
-                                play_arrow
-                                </span>
-                        </a>
                     </div>
                 </div>
-                
-                <!-- Performance 2 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-96">
+
+                <!-- Video 2 — sp2r3zYGp64 -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-96 cursor-pointer"
+                     onclick="openVideo('sp2r3zYGp64')">
                     <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-under-neon-lights-1230-large.mp4" type="video/mp4">
-                        </video>
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/sp2r3zYGp64/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/sp2r3zYGp64/hqdefault.jpg'"
+                             alt="Vidéo 2 BLACKSNOW">
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <h3 class="text-2xl font-bold mb-1">"CHESHIRE" - ITZY</h3>
-                        <p class="text-neon-pink">KCON 2023 PERFORMANCE</p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-sp2r3zYGp64">
+                        <h3 class="text-xl font-bold mb-1">Vidéo 2</h3>
+                        <p class="text-neon-pink text-sm">BLACKSNOW DANCE CREW</p>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-blue flex items-center justify-center hover:bg-neon-blue transition duration-300">
-                            <span class="material-icons">
-                            play_arrow
-                            </span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Performance 3 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-yellow h-96">
-                    <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-young-women-dancing-at-a-party-3986-large.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <h3 class="text-2xl font-bold neon-text-yellow mb-1">"DYNAMITE" - BTS</h3>
-                        <p class="text-neon-blue">RETRO Y2K VERSION</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-yellow flex items-center justify-center hover:bg-neon-yellow transition duration-300">
-                            <span class="material-icons">
-                                play_arrow
-                                </span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Performance 4 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-purple h-96">
-                    <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-night-club-3985-large.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <h3 class="text-2xl font-bold neon-text-purple mb-1">"KILL THIS LOVE" - BLACKPINK</h3>
-                        <p class="text-neon-pink">CYBERPUNK REMIX</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-purple flex items-center justify-center hover:bg-neon-purple transition duration-300">
-                            <span class="material-icons">
-                                play_arrow
-                                </span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Performance 5 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-96">
-                    <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-club-3984-large.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <h3 class="text-2xl font-bold mb-1">"GOD'S MENU" - STRAY KIDS</h3>
-                        <p class="text-neon-yellow">COMPETITION VERSION</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 border-neon-blue flex items-center justify-center hover:bg-neon-blue transition duration-300">
-                            <span class="material-icons">
-                            play_arrow
-                            </span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Performance 6 -->
-                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 h-96">
-                    <div class="absolute inset-0">
-                        <video class="w-full h-full object-cover" autoplay muted loop>
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-under-colored-lights-1232-large.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                    <div class="absolute bottom-0 left-0 p-6">
-                        <div class="px-3 py-1 bg-neon-yellow text-black text-xs font-bold rounded-full inline-block mb-2">
-                            VIRAL
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 border-neon-blue flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-blue transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
                         </div>
-                        <h3 class="text-2xl font-bold neon-text-pink mb-1">"ANTIFRAGILE" - LE SSERAFIM</h3>
-                        <p class="text-neon-blue">TIKTOK VIRAL DANCE</p>
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-60">
-                        <a href="#" class="w-16 h-16 rounded-full border-2 flex items-center justify-center hover:bg-neon-pink transition duration-300">
-                            <span class="material-icons">
-                                play_arrow
-                                </span>
-                        </a>
                     </div>
                 </div>
+
+                <!-- Video 3 — ruNr-oQAAOA -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-yellow h-96 cursor-pointer"
+                     onclick="openVideo('ruNr-oQAAOA')">
+                    <div class="absolute inset-0">
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/ruNr-oQAAOA/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/ruNr-oQAAOA/hqdefault.jpg'"
+                             alt="Vidéo 3 BLACKSNOW">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-ruNr-oQAAOA">
+                        <h3 class="text-xl font-bold neon-text-yellow mb-1">Vidéo 3</h3>
+                        <p class="text-neon-blue text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 border-neon-yellow flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-yellow transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 4 — Nq9A8OEvmIY -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-purple h-96 cursor-pointer"
+                     onclick="openVideo('Nq9A8OEvmIY')">
+                    <div class="absolute inset-0">
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/Nq9A8OEvmIY/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/Nq9A8OEvmIY/hqdefault.jpg'"
+                             alt="Vidéo 4 BLACKSNOW">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-Nq9A8OEvmIY">
+                        <h3 class="text-xl font-bold neon-text-purple mb-1">Vidéo 4</h3>
+                        <p class="text-neon-pink text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 border-neon-purple flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-purple transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 5 — gPT5MW_Ffvw -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 border-neon-blue h-96 cursor-pointer"
+                     onclick="openVideo('gPT5MW_Ffvw')">
+                    <div class="absolute inset-0">
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/gPT5MW_Ffvw/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/gPT5MW_Ffvw/hqdefault.jpg'"
+                             alt="Vidéo 5 BLACKSNOW">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-gPT5MW_Ffvw">
+                        <h3 class="text-xl font-bold mb-1">Vidéo 5</h3>
+                        <p class="text-neon-yellow text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 border-neon-blue flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-blue transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 6 — ROrZpogDt4Q -->
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 h-96 cursor-pointer"
+                     onclick="openVideo('ROrZpogDt4Q')">
+                    <div class="absolute inset-0">
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/ROrZpogDt4Q/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/ROrZpogDt4Q/hqdefault.jpg'"
+                             alt="Vidéo 6 BLACKSNOW">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-ROrZpogDt4Q">
+                        <div class="px-3 py-1 bg-neon-yellow text-black text-xs font-bold rounded-full inline-block mb-2">VIRAL</div>
+                        <h3 class="text-xl font-bold neon-text-pink mb-1">Vidéo 6</h3>
+                        <p class="text-neon-blue text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full border-2 flex items-center justify-center bg-black bg-opacity-60 hover:bg-neon-pink transition duration-300">
+                            <span class="material-icons text-5xl">play_arrow</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             
             <div class="text-center mt-16">
                 <a href="https://www.youtube.com/@blacksnow_dancecrew" class="px-10 py-4 border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
-                    <span class="material-icons">
-                        ondemand_video
-                        </span> PLUS DE VIDEOS SUR YOUTUBE
+                    <span class="material-icons">ondemand_video</span> PLUS DE VIDEOS SUR YOUTUBE
                 </a>
             </div>
         </div>
     </section>
+
     <footer class="footer">
         <div class="footer-left">
           <p>© 2025 BLACKSNOW. Tous droits réservés</p>
@@ -229,8 +289,62 @@
             <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
               <i class="fab fa-facebook"></i>
             </a>
-          </div>
-          
+        </div>
     </footer>
+
+    <script>
+        // ── YouTube oEmbed title fetcher ──────────────────────────────────────
+        const videos = [
+            { id: 'Sgd0IBj2YJM', badge: 'NEW',   badgeColor: 'bg-neon-pink',   titleColor: 'neon-text-pink',   subColor: 'text-neon-blue'   },
+            { id: 'sp2r3zYGp64', badge: null,      badgeColor: null,             titleColor: '',                 subColor: 'text-neon-pink'   },
+            { id: 'ruNr-oQAAOA', badge: null,      badgeColor: null,             titleColor: 'neon-text-yellow', subColor: 'text-neon-blue'   },
+            { id: 'Nq9A8OEvmIY', badge: null,      badgeColor: null,             titleColor: 'neon-text-purple', subColor: 'text-neon-pink'   },
+            { id: 'gPT5MW_Ffvw', badge: null,      badgeColor: null,             titleColor: '',                 subColor: 'text-neon-yellow' },
+            { id: 'ROrZpogDt4Q', badge: 'VIRAL',  badgeColor: 'bg-neon-yellow', titleColor: 'neon-text-pink',   subColor: 'text-neon-blue'   },
+        ];
+
+        // Fetch titles via YouTube oEmbed (no API key needed)
+        videos.forEach(v => {
+            fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v.id}&format=json`)
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById(`info-${v.id}`);
+                    if (!container) return;
+                    const titleEl = container.querySelector('h3');
+                    const subEl   = container.querySelector('p');
+                    if (titleEl) titleEl.textContent = data.title || titleEl.textContent;
+                    if (subEl)   subEl.textContent   = data.author_name || 'BLACKSNOW DANCE CREW';
+                })
+                .catch(() => {}); // silently ignore (CORS or network)
+        });
+
+        // ── Lightbox ──────────────────────────────────────────────────────────
+        const modal  = document.getElementById('yt-modal');
+        const iframe = document.getElementById('yt-iframe');
+
+        function openVideo(id) {
+            iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            modal.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modal-close').addEventListener('click', closeVideo);
+
+        // Close on backdrop click
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeVideo();
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeVideo();
+        });
+    </script>
 </body>
 </html>
