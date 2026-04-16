@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="loader.js"></script>
 </head>
 <body class="scanlines">
     <!-- Snowflakes -->
@@ -21,17 +22,15 @@
     
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
-        <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
-            <span class="material-icons">
-                close
-                </span>
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
         </button>
         <div class="flex flex-col items-center space-y-8 text-2xl">
             <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
-            <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
-            <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
-            <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
-            <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
+            <a href="membres.html" class="text-white transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white transition duration-300">VIDEOS</a>
+            <a href="contact.html" class="text-white transition duration-300">CONTACT</a>
         </div>
     </div>
 
@@ -41,6 +40,7 @@
             <div class="flex justify-between items-center">
                 <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
                 
+                <!-- Desktop menu -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
                     <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
@@ -48,10 +48,15 @@
                     <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
                     <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:text-neon-blue transition duration-300">CONTACT</a>
                 </div>
-            
+
+                <!-- Hamburger button (mobile only) -->
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
             </div>
         </div>
     </nav>
+
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-black y2k-grid-bg">
         <div class="absolute inset-0"></div>
@@ -66,14 +71,10 @@
             </p>
             <div class="flex flex-wrap justify-center gap-6">
                 <a href="videos.html" class="px-10 py-4 bg-black border-2 font-bold text-lg hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
-                    <span class="material-icons">
-                        ondemand_video
-                        </span> NOS VIDEOS
+                    <span class="material-icons">ondemand_video</span> NOS VIDEOS
                 </a>
-                <a href="news.html" class="px-10 py-4 bg-black border-2 border-neon-blue text-neon-blue font-bold text-lg hover hover transition duration-300 y2k-btn">
-                    <span class="material-icons">
-                        event
-                        </span> PROCHAINS ÉVÉNEMENTS
+                <a href="news.html" class="px-10 py-4 bg-black border-2 border-neon-blue text-neon-blue font-bold text-lg transition duration-300 y2k-btn">
+                    <span class="material-icons">event</span> PROCHAINS ÉVÉNEMENTS
                 </a>
             </div>
         </div>
@@ -81,9 +82,7 @@
         <div class="absolute bottom-10 left-0 right-0 flex justify-center">
             <a href="#about" class="animate-bounce">
                 <div class="w-10 h-10 border-2 rounded-full flex items-center justify-center">
-                    <span class="material-icons">
-                        expand_more
-                        </span>
+                    <span class="material-icons">expand_more</span>
                 </div>
             </a>
         </div>
@@ -111,14 +110,14 @@
                     <p class="text-gray-300 mb-8 text-xl">
                         BLACKSNOW est un crew de danse lillois formé en 2016, devenu une association en 2021. Passionnées par la pop coréenne, nous reprenons des chansons et chorégraphies issues de la K-Pop, et filmons / les performons sur scène, lors de conventions ou festivals par exemple. <br><br> Intéressé.e pour nous rejoindre ou nous inviter à un événement ?
                     </p>
-
-                    <a href="contact.html" class="px-10 py-4 bg-black border-2 border-neon-blue text-neon-blue font-bold text-lg hover hover transition duration-300 y2k-btn">
-                    NOUS CONTACTER
-                </a>
+                    <a href="contact.html" class="px-10 py-4 bg-black border-2 border-neon-blue text-neon-blue font-bold text-lg transition duration-300 y2k-btn">
+                        NOUS CONTACTER
+                    </a>
                 </div>
             </div>
         </div>
     </section>
+
     <footer class="footer">
         <div class="footer-left">
           <p>© 2025 BLACKSNOW. Tous droits réservés</p>
@@ -137,8 +136,31 @@
             <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
               <i class="fab fa-facebook"></i>
             </a>
-          </div>
-          
+        </div>
     </footer>
+
+    <script>
+        const openBtn  = document.getElementById('openMenu');
+        const closeBtn = document.getElementById('closeMenu');
+        const menu     = document.getElementById('mobileMenu');
+
+        openBtn.addEventListener('click', () => {
+            menu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Fermer aussi en cliquant sur un lien du menu
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
 </body>
 </html>

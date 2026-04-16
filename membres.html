@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="loader.js"></script>
 </head>
 <body class="scanlines">
     <!-- Snowflakes -->
@@ -22,17 +22,15 @@
     
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
-        <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
-            <span class="material-icons">
-                close
-                </span>
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
         </button>
         <div class="flex flex-col items-center space-y-8 text-2xl">
-            <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
-            <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
-            <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
-            <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
-            <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
+            <a href="index.html" class="text-white transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white transition duration-300">VIDEOS</a>
+            <a href="contact.html" class="text-white transition duration-300">CONTACT</a>
         </div>
     </div>
 
@@ -49,7 +47,11 @@
                     <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
                     <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
                 </div>
-            
+
+                <!-- Hamburger -->
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -68,16 +70,16 @@
             
             <div id="members-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6"></div>
 
-            <script src="https://kit.fontawesome.com/a076d05399.js"></script>
             <script src="script.js"></script>
 
             <div class="text-center mt-16">
-                <a href="#contact" class="px-10 py-4 bg-black border-2 text-neon-pink font-bold text-lg hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
-                    <i class="fas fa-user-plus mr-2"></i> BECOME A MEMBER
+                <a href="contact.html" class="px-10 py-4 bg-black border-2 text-neon-pink font-bold text-lg hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
+                    <i class="fas fa-user-plus mr-2"></i> NOUS REJOINDRE
                 </a>
             </div>
         </div>
     </section>
+
     <footer class="footer">
         <div class="footer-left">
           <p>© 2025 BLACKSNOW. Tous droits réservés</p>
@@ -96,8 +98,28 @@
             <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
               <i class="fab fa-facebook"></i>
             </a>
-          </div>
-          
+        </div>
     </footer>
+
+    <script>
+        const openBtn  = document.getElementById('openMenu');
+        const closeBtn = document.getElementById('closeMenu');
+        const menu     = document.getElementById('mobileMenu');
+
+        openBtn.addEventListener('click', () => {
+            menu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        closeBtn.addEventListener('click', () => {
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
 </body>
 </html>

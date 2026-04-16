@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
             quote: "I swear we about to move a mountain, keep your eyes on that track.",
             song : "New Woman - LISA, ROSALÍA",
             socialLinks: {
-                instagram: "https://www.instagram.com/katmelomane",
+                instagram: "https://www.instagram.com/wearegingerpearl/",
             }
         },
     ];

@@ -9,41 +9,30 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-
     <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        #events {
-            flex: 1;
-        }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        #events { flex: 1; }
     </style>
 </head>
 <body class="scanlines">
-    <!-- Snowflakes -->
     <div class="snowflake">❅</div>
     <div class="snowflake">❆</div>
     <div class="snowflake">❅</div>
     <div class="snowflake">❆</div>
     <div class="snowflake">❅</div>
     <div class="snowflake">❆</div>
-    
+
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
-        <button class="absolute top-6 right-6 text-3xl neon-text-pink" id="closeMenu">
-            <span class="material-icons">close</span>
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
         </button>
         <div class="flex flex-col items-center space-y-8 text-2xl">
-            <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
-            <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
-            <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
-            <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
-            <a href="contact.html" class="text-white hover transition duration-300">CONTACT</a>
+            <a href="index.html" class="text-white transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white transition duration-300">VIDEOS</a>
+            <a href="contact.html" class="text-white transition duration-300">CONTACT</a>
         </div>
     </div>
 
@@ -52,7 +41,6 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
                 <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
-                
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
                     <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
@@ -60,24 +48,20 @@
                     <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
                     <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
                 </div>
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Events Section -->
     <section id="events" class="py-20 bg-black y2k-grid-bg border-t-2 border-neon-green">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-6xl font-bold mb-6 neon-text-green y2k-font pt-10" data-text="UPCOMING EVENTS">
-                    Événements à venir
-                </h2>
-                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">
-                    Venez nous voir performer !
-                </p>
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 neon-text-green y2k-font pt-10">Événements à venir</h2>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">Venez nous voir performer !</p>
             </div>
-            
             <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 max-w-4xl mx-auto">
-                <!-- Event 1 -->
                 <div class="y2k-card p-6 rounded-lg border-2">
                     <div class="flex flex-col md:flex-row">
                         <div class="md:w-1/3 flex flex-col items-center justify-center mb-4 md:mb-0">
@@ -88,21 +72,14 @@
                             <h3 class="text-2xl font-bold neon-text-pink mb-2">HORNAING GEEK FESTIVAL</h3>
                             <p class="text-gray-300 mb-4">Salle des sports Jean-Louis Carron <br> 59171 Hornaing</p>
                             <p class="text-gray-400 mb-4">
-                                <b>SAMEDI & DIMANCHE</b>
-                                <br>
-                                10h30 - Animation Just Dance (30min)
-                                <br>
-                                14h00 - Show Partie 1 (20min)
-                                <br>
+                                <b>SAMEDI & DIMANCHE</b><br>
+                                10h30 - Animation Just Dance (30min)<br>
+                                14h00 - Show Partie 1 (20min)<br>
                                 17h00 - Show Partie 2 (20min)
                             </p>
                             <div class="flex justify-between items-center">
-                                <span class="px-3 py-1 bg-neon-blue text-black text-xs font-bold rounded-full">
-                                    MAIN STAGE
-                                </span>
-                                <a href="https://www.helloasso.com/associations/association-orchies-retrogaming/evenements/hornaing-geek-festival-3" class="px-4 py-1 bg-black border-2 text-sm font-bold transition duration-300">
-                                    BILLETS
-                                </a>
+                                <span class="px-3 py-1 bg-neon-blue text-black text-xs font-bold rounded-full">MAIN STAGE</span>
+                                <a href="https://www.helloasso.com/associations/association-orchies-retrogaming/evenements/hornaing-geek-festival-3" class="px-4 py-1 bg-black border-2 text-sm font-bold transition duration-300">BILLETS</a>
                             </div>
                         </div>
                     </div>
@@ -117,19 +94,20 @@
           <p><a href="cgu.html">Mentions légales</a> · <a href="contact.html">Contact</a></p>
         </div>
         <div class="footer-right flex space-x-4 text-2xl">
-            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition">
-              <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition">
-              <i class="fab fa-youtube"></i>
-            </a>
-            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition">
-              <i class="fab fa-tiktok"></i>
-            </a>
-            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition">
-              <i class="fab fa-facebook"></i>
-            </a>
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-facebook"></i></a>
         </div>
     </footer>
+
+    <script>
+        const openBtn  = document.getElementById('openMenu');
+        const closeBtn = document.getElementById('closeMenu');
+        const menu     = document.getElementById('mobileMenu');
+        openBtn.addEventListener('click', () => { menu.classList.add('active'); document.body.style.overflow = 'hidden'; });
+        closeBtn.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; });
+        menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; }));
+    </script>
 </body>
 </html>
