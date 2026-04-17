@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
         {
-            name: "WANJING",
+            name: "GEMMA",
             role: "Danseuse / Chanteuse",
             //gardienne: "Gardienne de la Joie, Incarnation de la Tristesse",
             defaultImg: "images/gemma.png",
@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
             song : "Laffy Taffy - Esther Yu",
             socialLinks: {
                 instagram: "https://www.instagram.com/wanjing_tiaowu_/",
+                youtube: "https://www.youtube.com/@GL02Music",
                 xiaohongshu:{
                     url:"https://www.xiaohongshu.com/user/profile/627bd6930000000021023cca",
                     icon:"https://api.iconify.design/simple-icons/xiaohongshu.svg?color=white",
