@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéos ❅ BLACKSNOW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="loader.js"></script>
+
+    <style>
+        #yt-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+        #yt-modal.active { display: flex; }
+        #yt-modal .modal-inner {
+            position: relative;
+            width: 90vw;
+            max-width: 960px;
+            aspect-ratio: 16/9;
+        }
+        #yt-modal iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(157, 222, 255, 0.5);
+            box-shadow: 0 0 30px rgba(157, 222, 255, 0.3);
+        }
+        #yt-modal .close-btn {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        #yt-modal .close-btn:hover { color: #9DDEFF; }
+        .yt-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .y2k-card:hover .yt-thumb { transform: scale(1.08); }
+    </style>
+</head>
+<body class="scanlines">
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+
+    <!-- YouTube Modal -->
+    <div id="yt-modal">
+        <div class="modal-inner">
+            <button class="close-btn" id="modal-close">
+                <span class="material-icons" style="font-size:2rem;">close</span>
+            </button>
+            <iframe id="yt-iframe" src="" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
+        </button>
+        <div class="flex flex-col items-center space-y-8 text-2xl">
+            <a href="index.html" class="text-white transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white transition duration-300">VIDEOS</a>
+            <a href="contact.html" class="text-white transition duration-300">CONTACT</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b-2">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+                    <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+                    <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+                    <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+                    <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
+                </div>
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="performances" class="py-20 bg-black y2k-grid-bg border-t-2">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 y2k-font pt-10">Nos vidéos</h2>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">Découvrez nos performances filmées</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="video-grid">
+                <!-- Les cartes sont générées automatiquement par le script ci-dessous -->
+            </div>
+            <div class="text-center mt-16">
+                <a href="https://www.youtube.com/@blacksnow_dancecrew" class="px-10 py-4 border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300 y2k-btn">
+                    <span class="material-icons">ondemand_video</span> PLUS DE VIDEOS SUR YOUTUBE
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-left">
+          <p>© 2025 BLACKSNOW. Tous droits réservés</p>
+          <p><a href="cgu.html">Mentions légales</a> · <a href="contact.html">Contact</a></p>
+        </div>
+        <div class="footer-right flex space-x-4 text-2xl">
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════
+        //  LISTE DES VIDÉOS — de la plus récente à la plus ancienne
+        //  Pour ajouter une vidéo : copier un bloc { ... } et le coller
+        //  EN PREMIER dans le tableau. L'ID YouTube se trouve dans l'URL :
+        //  youtube.com/watch?v=XXXX  →  id: 'XXXX'
+        // ═══════════════════════════════════════════════════════════════════
+        const VIDEOS = [
+            {
+                id: 'HLJx5ymhR5w',
+                badge: 'NEW',               // badge affiché sur la carte ('' pour aucun)
+                badgeColor: 'bg-neon-pink', // couleur Tailwind du badge
+                border: '',                 // classe de bordure ex: 'border-neon-blue' ('' = défaut)
+                titleColor: 'neon-text-pink', // classe de couleur du titre
+                subtitleColor: 'text-neon-blue',
+            },
+            {
+                id: 'Sgd0IBj2YJM',
+                badge: 'NEW',               // badge affiché sur la carte ('' pour aucun)
+                badgeColor: 'bg-neon-pink', // couleur Tailwind du badge
+                border: '',                 // classe de bordure ex: 'border-neon-blue' ('' = défaut)
+                titleColor: 'neon-text-pink', // classe de couleur du titre
+                subtitleColor: 'text-neon-blue',
+            },
+            {
+                id: 'sp2r3zYGp64',
+                badge: '',
+                badgeColor: '',
+                border: 'border-neon-blue',
+                titleColor: '',
+                subtitleColor: 'text-neon-pink',
+            },
+            {
+                id: 'ruNr-oQAAOA',
+                badge: '',
+                badgeColor: '',
+                border: 'border-neon-yellow',
+                titleColor: 'neon-text-yellow',
+                subtitleColor: 'text-neon-blue',
+            },
+            {
+                id: 'Nq9A8OEvmIY',
+                badge: '',
+                badgeColor: '',
+                border: 'border-neon-purple',
+                titleColor: 'neon-text-purple',
+                subtitleColor: 'text-neon-pink',
+            },
+            {
+                id: 'gPT5MW_Ffvw',
+                badge: '',
+                badgeColor: '',
+                border: 'border-neon-blue',
+                titleColor: '',
+                subtitleColor: 'text-neon-yellow',
+            },
+        ];
+        // ═══════════════════════════════════════════════════════════════════
+
+        // Génération des cartes
+        const grid = document.getElementById('video-grid');
+        VIDEOS.forEach(v => {
+            const borderClass = v.border || 'border-white/20';
+            const playBorder  = v.border ? `border-2 ${v.border}` : 'border-2';
+            const badgeHTML   = v.badge
+                ? `<div class="px-3 py-1 ${v.badgeColor} text-black text-xs font-bold rounded-full inline-block mb-2">${v.badge}</div>`
+                : '';
+            const titleClass  = v.titleColor ? `text-xl font-bold ${v.titleColor} mb-1` : 'text-xl font-bold mb-1';
+
+            grid.insertAdjacentHTML('beforeend', `
+                <div class="y2k-card group relative rounded-lg overflow-hidden border-2 ${borderClass} h-96 cursor-pointer"
+                     onclick="openVideo('${v.id}')">
+                    <div class="absolute inset-0">
+                        <img class="yt-thumb"
+                             src="https://img.youtube.com/vi/${v.id}/maxresdefault.jpg"
+                             onerror="this.src='https://img.youtube.com/vi/${v.id}/hqdefault.jpg'"
+                             alt="">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-6" id="info-${v.id}">
+                        ${badgeHTML}
+                        <h3 class="${titleClass}">Chargement…</h3>
+                        <p class="${v.subtitleColor} text-sm">BLACKSNOW DANCE CREW</p>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black bg-opacity-40">
+                        <div class="w-20 h-20 rounded-full ${playBorder} flex items-center justify-center bg-black bg-opacity-60">
+                            <span class="material-icons text-5xl">play_arrow</span>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            // Récupération du vrai titre via oEmbed
+            fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v.id}&format=json`)
+                .then(r => r.json())
+                .then(d => {
+                    const c = document.getElementById(`info-${v.id}`);
+                    if (!c) return;
+                    const t = c.querySelector('h3');
+                    if (t) t.textContent = d.title || t.textContent;
+                })
+                .catch(() => {
+                    const t = document.querySelector(`#info-${v.id} h3`);
+                    if (t && t.textContent === 'Chargement…') t.textContent = 'Vidéo BLACKSNOW';
+                });
+        });
+
+        // Mobile menu
+        const openBtn  = document.getElementById('openMenu');
+        const closeBtn = document.getElementById('closeMenu');
+        const menu     = document.getElementById('mobileMenu');
+        openBtn.addEventListener('click', () => { menu.classList.add('active'); document.body.style.overflow = 'hidden'; });
+        closeBtn.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; });
+        menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; }));
+
+        // Modal YouTube
+        const modal  = document.getElementById('yt-modal');
+        const iframe = document.getElementById('yt-iframe');
+        function openVideo(id) { iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`; modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeVideo()  { modal.classList.remove('active'); iframe.src = ''; document.body.style.overflow = ''; }
+        document.getElementById('modal-close').addEventListener('click', closeVideo);
+        modal.addEventListener('click', e => { if (e.target === modal) closeVideo(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideo(); });
+    </script>
+</body>
+</html>

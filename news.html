@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualités ❅ BLACKSNOW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <style>
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        #events { flex: 1; }
+
+        /* ── Teaser card ── */
+        .bs-teaser {
+            background: #0a0a0a;
+            border: 2px solid #9DDEFF;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            overflow: hidden;
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+        .bs-teaser::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px);
+            pointer-events: none;
+        }
+        .bs-tag {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #9DDEFF;
+            border: 1px solid #9DDEFF;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 1.6rem;
+            text-transform: uppercase;
+        }
+        .bs-title {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .bs-year {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 2px #9DDEFF;
+            letter-spacing: 8px;
+            line-height: 1;
+            display: block;
+            margin: 0.4rem 0 1.6rem;
+        }
+        .bs-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(to right, #ff2d78, #9DDEFF);
+            margin: 0 auto 1.6rem;
+            border-radius: 2px;
+        }
+        .bs-glitch {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            letter-spacing: 5px;
+            color: #9DDEFF;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            animation: flicker 4s infinite;
+        }
+        .bs-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #444;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        .bs-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+        .bs-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff2d78;
+            animation: pulse-dot 2s infinite;
+        }
+        .bs-dot:nth-child(2) { animation-delay: 0.3s; background: #9DDEFF; }
+        .bs-dot:nth-child(3) { animation-delay: 0.6s; background: #ff2d78; }
+        .bs-deco {
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.04;
+            pointer-events: none;
+            color: #9DDEFF;
+        }
+        .bs-deco.tl { top: -10px; left: -10px; }
+        .bs-deco.br { bottom: -10px; right: -10px; }
+
+        @keyframes flicker {
+            0%, 95%, 100% { opacity: 1; }
+            96% { opacity: 0.3; }
+            97% { opacity: 1; }
+            98% { opacity: 0.5; }
+            99% { opacity: 1; }
+        }
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="scanlines">
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
+        </button>
+        <div class="flex flex-col items-center space-y-8 text-2xl">
+            <a href="index.html" class="text-white transition duration-300">ACCUEIL</a>
+            <a href="membres.html" class="text-white transition duration-300">MEMBRES</a>
+            <a href="news.html" class="text-white transition duration-300">ACTUALITÉS</a>
+            <a href="videos.html" class="text-white transition duration-300">VIDEOS</a>
+            <a href="contact.html" class="text-white transition duration-300">CONTACT</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-90 backdrop-blur-md border-b-2">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html"><img src="logo.svg" class="logo-header" alt="logo"></a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:neon-text-pink transition duration-300">ACCUEIL</a>
+                    <a href="membres.html" class="text-white hover transition duration-300">MEMBRES</a>
+                    <a href="news.html" class="text-white hover:neon-text-pink transition duration-300">ACTUALITÉS</a>
+                    <a href="videos.html" class="text-white hover:neon-text-pink transition duration-300">VIDEOS</a>
+                    <a href="contact.html" class="px-4 py-2 bg-black border-2 font-bold hover:border-neon-blue hover:text-neon-blue transition duration-300">CONTACT</a>
+                </div>
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="events" class="py-20 bg-black y2k-grid-bg border-t-2 border-neon-green">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 neon-text-green y2k-font pt-10">Événements à venir</h2>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">Venez nous voir performer !</p>
+            </div>
+
+            <!-- Teaser card -->
+            <div class="bs-teaser">
+                <span class="bs-deco tl">❅</span>
+                <span class="bs-deco br">❆</span>
+
+                <div class="bs-tag">Été 2026</div>
+                <div class="bs-title">Projet estival</div>
+                <span class="bs-year">❅ 2026 ❅</span>
+                <div class="bs-line"></div>
+                <div class="bs-glitch">En préparation</div>
+                <div class="bs-sub">Quelque chose se prépare…</div>
+                <div class="bs-dots">
+                    <div class="bs-dot"></div>
+                    <div class="bs-dot"></div>
+                    <div class="bs-dot"></div>
+                </div>
+                <div class="bs-sub">Plus d'infos bientôt sur nos réseaux</div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-left">
+          <p>© 2025 BLACKSNOW. Tous droits réservés</p>
+          <p><a href="cgu.html">Mentions légales</a> · <a href="contact.html">Contact</a></p>
+        </div>
+        <div class="footer-right flex space-x-4 text-2xl">
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" class="text-white hover:text-neon-pink transition"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" class="text-white hover:text-neon-yellow transition"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew?_t=8gOKtXCCmDx&_r=1" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" class="text-white hover:text-neon-blue transition"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const openBtn  = document.getElementById('openMenu');
+        const closeBtn = document.getElementById('closeMenu');
+        const menu     = document.getElementById('mobileMenu');
+        openBtn.addEventListener('click', () => { menu.classList.add('active'); document.body.style.overflow = 'hidden'; });
+        closeBtn.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; });
+        menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => { menu.classList.remove('active'); document.body.style.overflow = ''; }));
+    </script>
+</body>
+</html>
