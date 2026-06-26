@@ -21,10 +21,10 @@
         }
 
         .logo-header {
-    width: auto;
-    height: 85px;
-    max-height: 85px;
-}
+            width: auto;
+        height: 85px;
+        max-height: 85px;
+        }
 
         .logo-hero{
             width: 60%;
