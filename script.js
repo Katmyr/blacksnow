@@ -43,20 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 instagram: "https://www.instagram.com/_punkyskull_/",
             }
         },
-        {
-            name: "CARMEN",
-            role: "Danseuse / Chanteuse",
-            gardienne: "Son glamour à l'espagnole et son élégance à la française feront chavirer vos cœurs.",
-            defaultImg: "images/carmen.png",
-            hoverImg: "images/carmen.png",
-            defaultIcon: "https://static.vecteezy.com/system/resources/previews/036/631/694/non_2x/sun-free-vector.png",
-            hoverIcon: "https://static.vecteezy.com/system/resources/previews/036/666/670/non_2x/moon-free-vector.png",
-            quote: "Les chiffres sont une poésie silencieuse.",
-            song : "Senorita - i-dle",
-            socialLinks: {
-                tiktok: "https://www.tiktok.com/@mystie666?_t=ZN-8vWZE5LtqDe&_r=1",
-            }
-        },
         //{
             //name: "SOUMEYA",
             //role: "Danseuse / Chanteuse",
