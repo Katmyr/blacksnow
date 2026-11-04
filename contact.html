@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact ❅ BLACKSNOW, crew de danse K-Pop à Lille</title>
+    <meta name="description" content="Contactez BLACKSNOW pour rejoindre le crew ou nous inviter à un événement (convention, festival, random dance) à Lille et alentours.">
+    <link rel="canonical" href="https://blacksnowdancecrew.fr/contact">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="BLACKSNOW">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Contact ❅ BLACKSNOW, crew de danse K-Pop à Lille">
+    <meta property="og:description" content="Contactez BLACKSNOW pour rejoindre le crew ou nous inviter à un événement (convention, festival, random dance) à Lille et alentours.">
+    <meta property="og:url" content="https://blacksnowdancecrew.fr/contact">
+    <meta property="og:image" content="https://blacksnowdancecrew.fr/images/groupe.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#151515">
+    <link rel="icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>if (window.tailwind) tailwind.config = { theme: { extend: { colors: { "neon-blue": "#9DDEFF", "neon-pink": "#ff2d78" } } } };</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=a474db77">
+
+</head>
+<body class="scanlines page-flex">
+    <div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+    <div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+    <div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu" aria-label="Fermer le menu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
+        </button>
+        <nav class="flex flex-col items-center space-y-8 text-2xl" aria-label="Menu mobile">
+            <a href="/" class="text-white">ACCUEIL</a>
+            <a href="/membres" class="text-white">MEMBRES</a>
+            <a href="/news" class="text-white">ACTUALITÉS</a>
+            <a href="/videos" class="text-white">VIDÉOS</a>
+            <a href="/contact" class="text-white">CONTACT</a>
+        </nav>
+    </div>
+
+    <header class="site-header fixed w-full z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" aria-label="BLACKSNOW, accueil"><img src="/logo.svg" class="logo-header" alt="BLACKSNOW" width="170" height="85"></a>
+                <nav class="hidden md:flex items-center space-x-8" aria-label="Navigation principale">
+                    <a href="/" class="text-white transition duration-300">ACCUEIL</a>
+                    <a href="/membres" class="text-white transition duration-300">MEMBRES</a>
+                    <a href="/news" class="text-white transition duration-300">ACTUALITÉS</a>
+                    <a href="/videos" class="text-white transition duration-300">VIDÉOS</a>
+                    <a href="/contact" class="y2k-btn sm">CONTACT</a>
+                </nav>
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white" aria-label="Ouvrir le menu" aria-controls="mobileMenu" aria-expanded="false">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="py-20 bg-black y2k-grid-bg border-t-2">
+        <div class="mt-16 max-w-2xl mx-auto form p-8 rounded-lg border-2">
+            <h1 class="text-3xl font-bold mb-6 text-center">CONTACTEZ-NOUS</h1>
+            <form action="https://formspree.io/f/mwplyjzj" method="POST" id="contact-form" class="space-y-4">
+                <div>
+                    <label for="subject" class="block text-neon-blue mb-2">OBJET</label>
+                    <select id="subject" name="subject" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white">
+                        <option value="">[Aucun objet]</option>
+                        <option value="intégrer le groupe">Intégrer le groupe</option>
+                        <option value="participation à un evenement">Demande de participation à un événement</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="first-name" class="block mb-2">PRÉNOM</label>
+                        <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white" required>
+                    </div>
+                    <div>
+                        <label for="last-name" class="block mb-2">NOM</label>
+                        <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white">
+                    </div>
+                </div>
+                <div>
+                    <label for="email" class="block mb-2">EMAIL</label>
+                    <input type="email" name="email" id="email" autocomplete="email" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white" required>
+                </div>
+                <div>
+                    <label for="tel" class="block mb-2">TÉLÉPHONE</label>
+                    <input type="tel" name="tel" id="tel" autocomplete="tel" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white">
+                </div>
+                <div>
+                    <label for="message" class="block mb-2">MESSAGE</label>
+                    <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 bg-gray-900 border-2 rounded-lg focus:outline-none focus:border-neon-blue text-white" required></textarea>
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="y2k-btn is-neon w-full">ENVOYER</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-left">
+          <p>© 2026 BLACKSNOW. Tous droits réservés</p>
+          <p><a href="/cgu">Mentions légales</a> · <a href="/contact">Contact</a></p>
+        </div>
+        <div class="footer-right flex space-x-4 text-2xl">
+            <a href="https://www.instagram.com/blacksnow_dancecrew/" target="_blank" rel="noopener" aria-label="Instagram" class="text-white hover:text-neon-blue transition"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@blacksnow_dancecrew" target="_blank" rel="noopener" aria-label="YouTube" class="text-white hover:text-neon-blue transition"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.tiktok.com/@blacksnow_dancecrew" target="_blank" rel="noopener" aria-label="TikTok" class="text-white hover:text-neon-blue transition"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/people/Black-Snow/100039859277194/" target="_blank" rel="noopener" aria-label="Facebook" class="text-white hover:text-neon-blue transition"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+        </div>
+    </footer>
+    <script src="/js/site.js?v=a474db77" defer></script>
+
+</body>
+</html>
