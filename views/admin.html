@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Espace de gestion</title>
+<link rel="icon" href="/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  :root { --bg:#111; --panel:#1a1a1a; --panel2:#222; --line:#333; --txt:#eee; --muted:#999; --accent:#9DDEFF; --pink:#ff2d78; --ok:#5be38c; --warn:#ffcc66; --err:#ff6b6b; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inconsolata', monospace; background: var(--bg); color: var(--txt); font-size: 16px; min-height: 100vh; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; background: none; border: none; }
+  .material-icons { font-size: 20px; vertical-align: middle; }
+  .hidden { display: none !important; }
+  a { color: var(--accent); }
+
+  /* Connexion */
+  #login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .login-box { width: 100%; max-width: 380px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 32px; }
+  .login-box h1 { font-size: 22px; margin-bottom: 20px; }
+  .pw { position: relative; }
+  .pw button { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+
+  /* Champs */
+  label { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .05em; }
+  input[type=text], input[type=password], input[type=url], input[type=date], input[type=time], input[type=search], select, textarea {
+    width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  textarea { min-height: 90px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .row, .row3 { grid-template-columns: 1fr; } }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel2); font-weight: 700; transition: .15s; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
+  .btn.primary:hover { filter: brightness(1.1); }
+  .btn.danger:hover { border-color: var(--err); color: var(--err); }
+  .btn.small { padding: 6px 10px; font-size: 14px; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .icon-btn { width: 34px; height: 34px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
+  .icon-btn:hover { background: var(--panel2); color: var(--txt); }
+  .icon-btn.danger:hover { color: var(--err); }
+  .err { color: var(--err); font-size: 14px; margin-top: 10px; min-height: 1em; }
+
+  /* Layout */
+  header.top { position: sticky; top: 0; z-index: 10; background: rgba(17,17,17,.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  .top-inner { max-width: 1280px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .brand { font-weight: 900; letter-spacing: .1em; }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tab { padding: 8px 14px; border-radius: 8px; color: var(--muted); font-weight: 700; }
+  .tab[aria-selected=true] { background: var(--panel2); color: var(--accent); }
+  .tab:hover { color: var(--txt); }
+  .top-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 16px 60px; }
+  .split { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  .panel h2 { font-size: 18px; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .panel h3 { font-size: 15px; margin: 22px 0 4px; color: var(--accent); }
+
+  /* Listes */
+  .list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; border: 1px solid transparent; background: var(--panel2); cursor: pointer; }
+  .item:hover { border-color: var(--line); }
+  .item.active { border-color: var(--accent); }
+  .item.drag-over { border-color: var(--pink); border-style: dashed; }
+  .item img, .item .ph { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; background: #333; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+  .item .meta { flex: 1; min-width: 0; }
+  .item .name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item .sub { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .handle { cursor: grab; color: var(--muted); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: .05em; text-transform: uppercase; }
+  .b-draft { background: #444; color: #ddd; } .b-pub { background: var(--ok); color: #000; }
+  .b-up { background: var(--accent); color: #000; } .b-past { background: #333; color: var(--muted); border: 1px solid #555; }
+  .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
+
+  /* Éditeur */
+  .editor-empty { color: var(--muted); text-align: center; padding: 60px 20px; }
+  .status { font-size: 13px; padding: 4px 10px; border-radius: 99px; background: var(--panel2); color: var(--muted); white-space: nowrap; }
+  .status.ok { color: var(--ok); } .status.busy { color: var(--warn); } .status.err { color: var(--err); }
+  .media-drop { display: flex; gap: 16px; align-items: center; padding: 12px; border: 2px dashed var(--line); border-radius: 10px; }
+  .media-drop.over { border-color: var(--accent); }
+  .media-drop img { width: 110px; height: 140px; object-fit: cover; border-radius: 8px; background: #333; }
+  .media-drop.wide img { width: 180px; height: 120px; }
+  .media-drop .ph { width: 110px; height: 140px; border-radius: 8px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: var(--muted); text-align: center; font-size: 13px; padding: 6px; }
+  .editor-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); align-items: center; }
+
+  /* Galerie */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { padding: 5px 12px; border-radius: 99px; border: 1px solid var(--line); font-size: 14px; background: var(--panel2); user-select: none; }
+  .chip[aria-pressed=true] { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+  .ggrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 14px; }
+  .gtile { position: relative; border-radius: 10px; overflow: hidden; border: 2px solid var(--line); background: var(--panel2); aspect-ratio: 1; padding: 0; transition: .15s; }
+  .gtile:hover, .gtile:focus-visible { border-color: var(--accent); outline: none; }
+  .gtile.untagged { border-color: var(--warn); }
+  .gtile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gtile .gnames { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 8px 6px; font-size: 12px; text-align: left; background: linear-gradient(to top, rgba(0,0,0,.9), transparent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gtile.untagged .gnames { color: var(--warn); font-weight: 700; }
+  .gtools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .media-drop.big { justify-content: center; padding: 34px 20px; text-align: left; }
+  .review { width: min(1200px, 96vw); max-width: none; height: min(820px, 94vh); padding: 0; display: none; flex-direction: column; overflow: hidden; }
+  .review[open] { display: flex; }
+  .rv-top { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .rv-top .icon-btn { margin-left: auto; }
+  .rv-body { flex: 1; display: grid; grid-template-columns: 1fr 340px; min-height: 0; }
+  .rv-img { background: #000; display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .rv-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .rv-side { padding: 6px 18px 18px; overflow-y: auto; border-left: 1px solid var(--line); }
+  .rv-side .chip kbd { font: inherit; font-size: 11px; opacity: .6; margin-right: 6px; }
+  .rv-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .rv-actions #rv-next { flex: 1; justify-content: center; }
+  @media (max-width: 760px) { .rv-body { grid-template-columns: 1fr; grid-template-rows: 45vh auto; overflow-y: auto; } .rv-side { border-left: none; } }
+  .progress { height: 6px; background: var(--panel2); border-radius: 99px; overflow: hidden; margin-top: 10px; }
+  .progress div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+
+  /* Vidéos */
+  .vlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+  .vcard { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .vcard.off { opacity: .45; }
+  .vcard img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .vcard .vb { padding: 8px 10px; font-size: 14px; }
+  .vcard .vt { font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+  .vcard .vf { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; gap: 6px; color: var(--muted); font-size: 13px; }
+  .toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; text-transform: none; letter-spacing: 0; margin: 0; color: var(--txt); font-size: 13px; }
+  .preview { aspect-ratio: 16/9; width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #000; margin-top: 14px; }
+
+  .b-mod { background: var(--warn); color: #000; }
+  .caps { text-transform: uppercase; }
+  .add-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .add-row input { max-width: 260px; }
+  .publish-bar { position: sticky; bottom: 0; margin: 22px -18px -18px; padding: 14px 18px; background: #151515; border-top: 1px solid var(--line); border-radius: 0 0 12px 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; z-index: 2; }
+  .pb-state { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 200px; }
+  .pb-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pp-wrap { display: flex; gap: 16px; align-items: flex-start; }
+  .pp-current img, .pp-current .ph { width: 130px; height: 170px; border-radius: 8px; object-fit: cover; background: #2a2a2a; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); font-size: 13px; padding: 0; }
+  .pp-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  .pp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; width: 100%; max-height: 230px; overflow-y: auto; }
+  .pp-grid button { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 2px solid transparent; }
+  .pp-grid button[aria-pressed=true] { border-color: var(--accent); }
+  .pp-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 560px) { .pp-wrap { flex-direction: column; } }
+  .socials-list { display: flex; flex-direction: column; gap: 8px; }
+  .social-row { display: grid; grid-template-columns: 120px 1fr auto; gap: 8px; align-items: center; }
+  .social-label { font-size: 13px; color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  dialog { margin: auto; background: var(--panel); color: var(--txt); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: min(520px, 92vw); }
+  dialog::backdrop { background: rgba(0,0,0,.7); }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel2); border: 1px solid var(--line); padding: 10px 18px; border-radius: 10px; z-index: 100; max-width: 92vw; }
+  .toast.err { border-color: var(--err); color: var(--err); }
+</style>
+</head>
+<body>
+
+<!-- ═══ Connexion ═══ -->
+<section id="login" class="hidden">
+  <form class="login-box" id="login-form">
+    <h1>❅ Espace de gestion</h1>
+    <label for="pw">Mot de passe</label>
+    <div class="pw">
+      <input type="password" id="pw" autocomplete="current-password" required autofocus>
+      <button type="button" id="pw-eye" aria-label="Afficher le mot de passe"><span class="material-icons">visibility</span></button>
+    </div>
+    <p class="err" id="login-err" role="alert"></p>
+    <button class="btn primary" style="width:100%;justify-content:center;margin-top:8px">Se connecter</button>
+  </form>
+</section>
+
+<!-- ═══ Application ═══ -->
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="top-inner">
+      <span class="brand">❅ BLACKSNOW</span>
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="members">Membres</button>
+        <button class="tab" role="tab" data-tab="gallery">Galerie</button>
+        <button class="tab" role="tab" data-tab="events">Événements</button>
+        <button class="tab" role="tab" data-tab="videos">Vidéos</button>
+      </nav>
+      <div class="top-right">
+        <a class="btn small" href="/" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span> Voir le site</a>
+        <button class="btn small" id="logout"><span class="material-icons">logout</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── Membres ── -->
+    <section data-panel="members" class="split hidden">
+      <div class="panel">
+        <h2>Membres <button class="btn small primary" data-new="members"><span class="material-icons">add</span> Nouveau</button></h2>
+        <p class="hint" style="margin:-4px 0 12px">Glisse les lignes (ou ↑↓) pour changer l'ordre d'affichage.</p>
+        <ul class="list" id="members-list"></ul>
+      </div>
+      <div class="panel" id="members-editor"></div>
+    </section>
+
+    <!-- ── Galerie ── -->
+    <section data-panel="gallery" class="hidden">
+      <div class="panel">
+        <div class="media-drop big" id="up-drop">
+          <span class="material-icons" style="font-size:44px;color:var(--accent)">add_photo_alternate</span>
+          <div>
+            <button class="btn primary" id="up-pick"><span class="material-icons">upload</span> Importer des photos</button>
+            <p class="hint">ou glisse-les ici · 60 max par envoi · compressées automatiquement.<br>Tu diras qui est dessus juste après, photo par photo.</p>
+          </div>
+          <input type="file" id="up-files" accept=".jpg,.jpeg,.png,.webp,.avif" multiple hidden>
+        </div>
+        <div class="progress hidden" id="up-progress"><div></div></div>
+        <p class="err" id="up-err"></p>
+      </div>
+
+      <div class="panel" style="margin-top:20px">
+        <h2>Photos <span class="gtools">
+          <button class="btn small hidden" id="g-untagged"></button>
+          <select id="g-filter" style="width:auto"></select></span></h2>
+        <p class="hint" style="margin-top:-6px">Triées de la plus récente à la plus ancienne (date de prise de vue). Clique sur une photo pour la modifier.</p>
+        <div class="ggrid" id="g-grid"></div>
+      </div>
+    </section>
+
+    <!-- ── Événements ── -->
+    <section data-panel="events" class="split hidden">
+      <div class="panel">
+        <h2>Événements <button class="btn small primary" data-new="events"><span class="material-icons">add</span> Nouveau</button></h2>
+        <ul class="list" id="events-list"></ul>
+      </div>
+      <div class="panel" id="events-editor"></div>
+    </section>
+
+    <!-- ── Vidéos ── -->
+    <section data-panel="videos" class="hidden">
+      <div class="panel">
+        <h2>Vidéo de fond de l'accueil <span class="status" id="hero-status">Prêt</span></h2>
+        <label for="hero-select">Choisir parmi les vidéos affichées sur le site</label>
+        <select id="hero-select"></select>
+        <label for="hero-url">… ou coller un lien YouTube</label>
+        <input type="url" id="hero-url" placeholder="https://www.youtube.com/watch?v=...">
+        <div class="row">
+          <div><label for="hero-start">Début (m:ss)</label><input type="text" id="hero-start" placeholder="0:05" inputmode="numeric"></div>
+          <div><label for="hero-end">Fin (m:ss, vide = jusqu'au bout)</label><input type="text" id="hero-end" placeholder="3:10" inputmode="numeric"></div>
+        </div>
+        <p class="hint">La vidéo tourne en boucle entre ces deux moments, sans le son.</p>
+        <iframe class="preview" id="hero-preview" title="Aperçu" allow="autoplay; encrypted-media"></iframe>
+        <div class="editor-actions">
+          <button class="btn" id="hero-test"><span class="material-icons">play_arrow</span> Aperçu</button>
+          <button class="btn primary" id="hero-save"><span class="material-icons">save</span> Enregistrer</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px">
+        <h2>Vidéos de la chaîne
+          <button class="btn small" id="v-refresh"><span class="material-icons">sync</span> Actualiser</button></h2>
+        <p class="hint" id="v-info"></p>
+        <div class="vlist" id="v-list"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="review" class="review" aria-label="Taguer les photos">
+  <div class="rv-top">
+    <strong id="rv-count"></strong>
+    <span class="status" id="rv-status"></span>
+    <button class="icon-btn" id="rv-close" aria-label="Fermer"><span class="material-icons">close</span></button>
+  </div>
+  <div class="rv-body">
+    <div class="rv-img"><img id="rv-img" alt=""></div>
+    <div class="rv-side">
+      <label>Qui est sur la photo ? <span style="text-transform:none">(touches 1 à 9)</span></label>
+      <div class="chips" id="rv-members"></div>
+      <button type="button" class="btn small" id="rv-same" style="margin-top:10px"><span class="material-icons">content_copy</span> Mêmes personnes que la précédente</button>
+      <label for="rv-date">Date de la photo</label>
+      <input type="date" id="rv-date">
+      <p class="hint">Remplie automatiquement si possible. Sert seulement au tri, n'est pas affichée sur le site.</p>
+      <label for="rv-legende">Légende (optionnel)</label>
+      <input type="text" id="rv-legende" maxlength="200" placeholder="Ex. Japan Expo 2026">
+      <div class="rv-actions">
+        <button type="button" class="btn small danger" id="rv-del"><span class="material-icons">delete</span></button>
+        <button type="button" class="btn" id="rv-prev"><span class="material-icons">arrow_back</span></button>
+        <button type="button" class="btn primary" id="rv-next"></button>
+      </div>
+      <p class="hint">← → pour naviguer · Entrée = suivante</p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+'use strict';
+// ═══ Utilitaires ═══
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date());
+const frDate = d => d ? new Date(d + 'T00:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Sans date';
+const toSec = v => { v = String(v || '').trim(); if (!v) return 0; const p = v.split(':').map(Number); return p.some(isNaN) ? NaN : p.reduce((a, b) => a * 60 + b, 0); };
+const fmtSec = s => s ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : '';
+const ytId = v => { v = String(v || '').trim(); const m = v.match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(v) ? v : ''); };
+const SOCIALS = [['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['youtube', 'YouTube'], ['facebook', 'Facebook'], ['xiaohongshu', 'Xiaohongshu'], ['bilibili', 'Bilibili']];
+
+let token = null;
+try { token = localStorage.getItem('bs-admin-token'); } catch {}
+const state = { members: [], events: [], gallery: [], settings: null, videos: null };
+
+function toast(msg, isErr) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), isErr ? 5000 : 2500);
+}
+
+async function api(method, url, body) {
+  const isForm = body instanceof FormData;
+  const headers = {};
+  if (token) headers.Authorization = 'Bearer ' + token;
+  if (body && !isForm) headers['Content-Type'] = 'application/json';
+  const res = await fetch(url, { method, headers, body: body ? (isForm ? body : JSON.stringify(body)) : undefined });
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (res.status === 401 && !url.endsWith('/login')) { showLogin('Session expirée, reconnecte-toi.'); throw new Error(data.error || 'Non connecté'); }
+  if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
+  return data;
+}
+
+function uploadWithProgress(url, form, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    xhr.upload.onprogress = e => e.lengthComputable && onProgress(e.loaded / e.total);
+    xhr.onload = () => {
+      let d = {}; try { d = JSON.parse(xhr.responseText); } catch {}
+      if (xhr.status === 401) { showLogin('Session expirée, reconnecte-toi.'); return reject(new Error('Non connecté')); }
+      xhr.status < 300 ? resolve(d) : reject(new Error(d.error || `Erreur ${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new Error('Connexion perdue pendant l\'envoi.'));
+    xhr.send(form);
+  });
+}
+
+// ═══ Connexion ═══
+function showLogin(msg) {
+  token = null; try { localStorage.removeItem('bs-admin-token'); } catch {}
+  $('#app').classList.add('hidden'); $('#login').classList.remove('hidden');
+  $('#login-err').textContent = msg || ''; $('#pw').focus();
+}
+$('#pw-eye').onclick = () => {
+  const i = $('#pw'); const show = i.type === 'password';
+  i.type = show ? 'text' : 'password';
+  $('#pw-eye .material-icons').textContent = show ? 'visibility_off' : 'visibility';
+  $('#pw-eye').setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+};
+$('#login-form').onsubmit = async e => {
+  e.preventDefault();
+  $('#login-err').textContent = '';
+  try {
+    const { token: t } = await api('POST', '/api/auth/login', { password: $('#pw').value });
+    token = t; try { localStorage.setItem('bs-admin-token', t); } catch {}
+    $('#pw').value = '';
+    start();
+  } catch (err) { $('#login-err').textContent = err.message; }
+};
+$('#logout').onclick = async () => { try { await api('POST', '/api/auth/logout'); } catch {} showLogin(); };
+
+// ═══ Onglets ═══
+function openTab(name) {
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+  $$('[data-panel]').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== name));
+  try { localStorage.setItem('bs-admin-tab', name); } catch {}
+}
+$$('.tab').forEach(t => t.onclick = () => openTab(t.dataset.tab));
+
+// ═══ Éditeur générique (membres / événements) ═══
+// Les modifications sont enregistrées automatiquement en brouillon ;
+// rien n'apparaît sur le site avant un clic sur « Publier ».
+const ETAT = { brouillon: ['Brouillon', 'b-draft'], publie: ['Publié', 'b-pub'], modifie: ['Modifs non publiées', 'b-mod'] };
+const etatBadge = etat => `<span class="badge ${ETAT[etat][1]}">${ETAT[etat][0]}</span>`;
+
+function makeEditor(cfg) {
+  const ed = { current: null, timer: null, chain: Promise.resolve() };
+  const root = $(`#${cfg.name}-editor`);
+  const status = (txt, cls = '') => { const s = $('.status', root); if (s) { s.textContent = txt; s.className = 'status ' + cls; } };
+
+  ed.open = item => {
+    clearTimeout(ed.timer);
+    ed.current = item ? JSON.parse(JSON.stringify(item)) : { etat: 'brouillon' };
+    root.innerHTML = `<h2><span>${item ? 'Modifier' : 'Nouveau'}</span><span class="status">${item ? 'Enregistré' : 'Prêt'}</span></h2>` + cfg.form(ed.current) + `
+      <div class="publish-bar">
+        <div class="pb-state"></div>
+        <div class="pb-actions">
+          <button class="btn small" data-act="revert"><span class="material-icons">undo</span> Annuler les modifs</button>
+          <button class="btn small" data-act="unpublish"><span class="material-icons">visibility_off</span> Retirer du site</button>
+          <button class="btn primary" data-act="publish"><span class="material-icons">publish</span> Publier</button>
+        </div>
+      </div>
+      <div class="editor-actions"><button class="btn small danger" data-act="delete" style="margin-left:auto"><span class="material-icons">delete</span> Supprimer</button></div>`;
+    root.querySelectorAll('[data-f]').forEach(inp => inp.addEventListener('input', () => ed.schedule()));
+    root.querySelectorAll('[data-media]').forEach(zone => bindMedia(zone));
+    cfg.bind && cfg.bind(ed, root);
+    $('[data-act=publish]', root).onclick = () => ed.action('publish');
+    $('[data-act=unpublish]', root).onclick = () => confirm('Retirer du site ? (rien n\'est supprimé, ça repasse en brouillon)') && ed.action('unpublish');
+    $('[data-act=revert]', root).onclick = () => confirm('Revenir à la version actuellement publiée ?') && ed.action('revert', true);
+    $('[data-act=delete]', root).onclick = () => ed.remove();
+    ed.refreshBar();
+    cfg.renderList();
+    if (window.innerWidth < 900) root.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  ed.collect = () => {
+    const b = { ...ed.current };
+    root.querySelectorAll('[data-f]').forEach(inp => { b[inp.dataset.f] = inp.value; });
+    return cfg.collect ? cfg.collect(b, root) : b;
+  };
+  ed.schedule = () => { clearTimeout(ed.timer); status('Modifications…', 'busy'); ed.timer = setTimeout(() => ed.save(), 1000); };
+  const store = saved => {
+    ed.current = JSON.parse(JSON.stringify(saved));
+    const list = state[cfg.name];
+    const i = list.findIndex(x => x.id === saved.id);
+    i >= 0 ? (list[i] = saved) : list.push(saved);
+    ed.refreshBar(); cfg.renderList(); cfg.afterSave && cfg.afterSave();
+  };
+  ed.save = () => {
+    clearTimeout(ed.timer);
+    ed.chain = ed.chain.then(async () => {
+      const body = ed.collect();
+      status('Enregistrement…', 'busy');
+      try {
+        const saved = body.id ? await api('PUT', `/api/admin/${cfg.name}/${body.id}`, body) : await api('POST', `/api/admin/${cfg.name}`, body);
+        store(saved);
+        status('Brouillon enregistré', 'ok');
+      } catch (err) { status(err.message, 'err'); toast(err.message, true); }
+    });
+    return ed.chain;
+  };
+  ed.action = async (act, reopen) => {
+    await ed.save(); // enregistre d'abord ce qui est en cours de frappe
+    if (!ed.current?.id) return;
+    try {
+      const saved = await api('POST', `/api/admin/${cfg.name}/${ed.current.id}/${act}`);
+      reopen ? ed.open(saved) : store(saved);
+      status({ publish: 'Publié ✓', unpublish: 'Retiré du site', revert: 'Modifs annulées' }[act], 'ok');
+    } catch (err) { status(err.message, 'err'); toast(err.message, true); }
+  };
+  ed.remove = async () => {
+    if (!ed.current.id) { root.innerHTML = cfg.emptyHtml; ed.current = null; return; }
+    if (!confirm(cfg.confirmDelete(ed.current))) return;
+    clearTimeout(ed.timer);
+    try {
+      await api('DELETE', `/api/admin/${cfg.name}/${ed.current.id}`);
+      state[cfg.name] = state[cfg.name].filter(x => x.id !== ed.current.id);
+      ed.current = null; root.innerHTML = cfg.emptyHtml;
+      cfg.renderList(); cfg.afterSave && cfg.afterSave();
+      toast('Supprimé.');
+    } catch (err) { toast(err.message, true); }
+  };
+  ed.refreshBar = () => {
+    const etat = ed.current.etat || 'brouillon';
+    const txt = {
+      brouillon: 'Pas encore visible sur le site.',
+      publie: 'En ligne. Toute modification restera en brouillon jusqu\'au prochain « Publier ».',
+      modifie: 'Des modifications ne sont pas encore en ligne.',
+    }[etat];
+    $('.pb-state', root).innerHTML = `${etatBadge(etat)} <span class="hint" style="margin:0">${txt}</span>`;
+    const pub = $('[data-act=publish]', root);
+    pub.disabled = etat === 'publie';
+    pub.innerHTML = `<span class="material-icons">publish</span> ${etat === 'modifie' ? 'Publier les modifications' : 'Publier'}`;
+    $('[data-act=revert]', root).classList.toggle('hidden', etat !== 'modifie');
+    $('[data-act=unpublish]', root).classList.toggle('hidden', etat === 'brouillon');
+  };
+
+  // Zone image (affiche d'événement) → upload immédiat + compression serveur
+  function bindMedia(zone) {
+    const [fUrl, fMini] = zone.dataset.media.split(',');
+    const input = $('input[type=file]', zone);
+    const go = async file => {
+      if (!file) return;
+      status('Envoi de l\'image…', 'busy');
+      const fd = new FormData(); fd.append('file', file);
+      try {
+        const r = await api('POST', '/api/admin/upload', fd);
+        ed.current[fUrl] = r.url; ed.current[fMini] = r.miniature;
+        $('.prev', zone).innerHTML = `<img src="/${esc(r.miniature)}" alt="">`;
+        $('[data-clear]', zone).classList.remove('hidden');
+        ed.save();
+      } catch (err) { status(err.message, 'err'); toast(err.message, true); }
+    };
+    $('[data-pick]', zone).onclick = () => input.click();
+    input.onchange = () => { go(input.files[0]); input.value = ''; };
+    $('[data-clear]', zone).onclick = () => {
+      ed.current[fUrl] = ''; ed.current[fMini] = '';
+      $('.prev', zone).innerHTML = `<div class="ph">Aucune image</div>`;
+      $('[data-clear]', zone).classList.add('hidden');
+      ed.save();
+    };
+    zone.ondragover = e => { e.preventDefault(); zone.classList.add('over'); };
+    zone.ondragleave = () => zone.classList.remove('over');
+    zone.ondrop = e => { e.preventDefault(); zone.classList.remove('over'); go(e.dataTransfer.files[0]); };
+  }
+  return ed;
+}
+
+const field = (k, label, v, attrs = '') => `<label for="f-${k}">${label}</label><input type="text" id="f-${k}" data-f="${k}" value="${esc(v)}" ${attrs}>`;
+const mediaZone = (keys, label, mini, wide) => `
+  <label>${label}</label>
+  <div class="media-drop${wide ? ' wide' : ''}" data-media="${keys}">
+    <div class="prev">${mini ? `<img src="/${esc(mini)}" alt="">` : '<div class="ph">Aucune image</div>'}</div>
+    <div>
+      <button type="button" class="btn small" data-pick><span class="material-icons">upload</span> Choisir</button>
+      <button type="button" class="btn small danger ${mini ? '' : 'hidden'}" data-clear><span class="material-icons">delete</span></button>
+      <p class="hint">ou glisse une image ici · compressée automatiquement</p>
+    </div>
+    <input type="file" accept=".jpg,.jpeg,.png,.webp,.avif" hidden>
+  </div>`;
+
+// ═══ Membres ═══
+const ROLE_SUGGESTIONS = ['Présidente', 'Vice-présidente', 'Trésorière', 'Secrétaire', 'Danseuse', 'Chanteuse', 'Chorégraphe'];
+const PLATFORMS = [
+  ['instagram.com', 'Instagram'], ['tiktok.com', 'TikTok'], ['youtube.com', 'YouTube'], ['youtu.be', 'YouTube'], ['facebook.com', 'Facebook'],
+  ['x.com', 'X'], ['twitter.com', 'X'], ['twitch.tv', 'Twitch'], ['spotify.com', 'Spotify'], ['soundcloud.com', 'SoundCloud'],
+  ['music.apple.com', 'Apple Music'], ['deezer.com', 'Deezer'], ['bilibili.com', 'Bilibili'], ['xiaohongshu.com', 'Xiaohongshu'],
+  ['linkedin.com', 'LinkedIn'], ['threads.net', 'Threads'], ['bsky.app', 'Bluesky'], ['discord.gg', 'Discord'], ['discord.com', 'Discord'],
+  ['pinterest.com', 'Pinterest'], ['pinterest.fr', 'Pinterest'], ['behance.net', 'Behance'],
+];
+const platformLabel = url => {
+  let host = ''; try { host = new URL(url).hostname.replace(/^(www|m)\./, ''); } catch { return url ? '⚠ lien invalide (https:// ?)' : 'Nouveau lien'; }
+  const p = PLATFORMS.find(([d]) => host === d || host.endsWith('.' + d));
+  return p ? p[1] : host;
+};
+const photosOf = id => state.gallery.filter(p => p.members.includes(id));
+const previewAudio = new Audio();
+
+const membersEd = makeEditor({
+  name: 'members',
+  emptyHtml: '<p class="editor-empty">Sélectionne un membre ou clique sur « Nouveau ».</p>',
+  confirmDelete: m => `Supprimer ${m.name || 'ce membre'} ? Ses photos restent dans la galerie (elle en sera seulement retirée).`,
+  form: m => `
+    ${field('name', 'Nom *', m.name, 'maxlength="60" placeholder="PRÉNOM" class="caps" autocomplete="off"')}
+
+    <label>Photo de profil * <span style="text-transform:none">— choisie parmi les photos où ${m.name ? esc(m.name) : 'ce membre'} apparaît</span></label>
+    <div class="pp-wrap">
+      <div class="pp-current">${m.photo ? `<img src="/${esc(m.miniature || m.photo)}" alt="">` : '<div class="ph">Aucune photo choisie</div>'}</div>
+      <div class="pp-side">
+        <div class="pp-grid" id="pp-grid"></div>
+        <button type="button" class="btn small" id="pp-add"><span class="material-icons">add_photo_alternate</span> Ajouter des photos de ce membre</button>
+        <input type="file" id="pp-files" accept=".jpg,.jpeg,.png,.webp,.avif" multiple hidden>
+        <p class="hint">Les photos ajoutées ici vont aussi dans sa galerie.</p>
+      </div>
+    </div>
+
+    <label>Rôles</label>
+    <div class="chips" id="roles-chips"></div>
+    <div class="add-row">
+      <input type="text" id="role-new" maxlength="40" placeholder="Autre rôle…" autocomplete="off">
+      <button type="button" class="btn small" id="role-add"><span class="material-icons">add</span></button>
+    </div>
+
+    <label for="f-description">Description</label>
+    <textarea id="f-description" data-f="description" maxlength="400">${esc(m.description)}</textarea>
+
+    <h3>Chanson favorite</h3>
+    <div class="row">
+      <div>${field('song', 'Titre - Artiste', m.song, 'maxlength="120" placeholder="Titre - Artiste"')}</div>
+      <div><label for="f-songUrl">Lien streaming (Spotify, Deezer, YouTube…)</label>
+        <input type="url" id="f-songUrl" data-f="songUrl" value="${esc(m.songUrl)}" placeholder="https://open.spotify.com/track/..."></div>
+    </div>
+    <div class="add-row" style="margin-top:10px">
+      <button type="button" class="btn small" id="song-test"><span class="material-icons">play_arrow</span> Tester l'extrait</button>
+      <span class="hint" id="song-info" style="margin:0">Extrait de 30 s trouvé automatiquement sur Deezer (lien Deezer = résultat exact).</span>
+    </div>
+
+    <h3>Réseaux sociaux</h3>
+    <div id="socials-list" class="socials-list"></div>
+    <button type="button" class="btn small" id="social-add" style="margin-top:8px"><span class="material-icons">add</span> Ajouter un lien</button>`,
+  collect: (b, root) => {
+    b.roles = [...(membersEd.current.roles || [])];
+    b.socials = $$('#socials-list input', root).map(i => ({ url: i.value.trim() })).filter(x => x.url);
+    return b;
+  },
+  bind: (ed, root) => {
+    const m = ed.current;
+    m.roles = m.roles || [];
+    // Photo de profil depuis la galerie du membre
+    const renderPhotos = () => {
+      const list = m.id ? photosOf(m.id) : [];
+      $('#pp-grid', root).innerHTML = list.length
+        ? list.map(p => `<button type="button" data-url="${esc(p.url)}" data-mini="${esc(p.miniature)}" aria-pressed="${p.url === m.photo}"><img src="/${esc(p.miniature)}" alt="" loading="lazy"></button>`).join('')
+        : `<p class="hint" style="grid-column:1/-1">Aucune photo pour l'instant : ajoute-en avec le bouton ci-dessous ou tague ${m.name ? esc(m.name) : 'ce membre'} dans l'onglet Galerie.</p>`;
+      $$('#pp-grid button', root).forEach(b => b.onclick = () => {
+        ed.current.photo = b.dataset.url; ed.current.miniature = b.dataset.mini;
+        $('.pp-current', root).innerHTML = `<img src="/${esc(b.dataset.mini)}" alt="">`;
+        $$('#pp-grid button', root).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        ed.save();
+      });
+    };
+    renderPhotos();
+    $('#pp-add', root).onclick = async () => {
+      if (!ed.current.id) { await ed.save(); if (!ed.current.id) return; }
+      $('#pp-files', root).click();
+    };
+    $('#pp-files', root).onchange = async () => {
+      const files = [...$('#pp-files', root).files]; $('#pp-files', root).value = '';
+      if (!files.length) return;
+      const fd = new FormData(); files.forEach(f => fd.append('files', f));
+      fd.append('members', JSON.stringify([ed.current.id]));
+      const s = $('.status', root); s.textContent = 'Envoi des photos…'; s.className = 'status busy';
+      try {
+        const created = await uploadWithProgress('/api/admin/gallery', fd, () => {});
+        state.gallery.push(...created);
+        renderGalleryChips(); renderGallery(); renderPhotos();
+        s.textContent = `${created.length} photo(s) ajoutée(s)`; s.className = 'status ok';
+      } catch (err) { s.textContent = err.message; s.className = 'status err'; }
+    };
+    // Rôles (chips)
+    const renderRoles = () => {
+      const all = [...new Set([...ROLE_SUGGESTIONS, ...m.roles])];
+      $('#roles-chips', root).innerHTML = all.map(r => {
+        const on = ed.current.roles.includes(r), custom = !ROLE_SUGGESTIONS.includes(r);
+        return `<button type="button" class="chip" data-role="${esc(r)}" aria-pressed="${on}">${esc(r)}${custom ? ' <span aria-hidden="true">×</span>' : ''}</button>`;
+      }).join('');
+      $$('#roles-chips .chip', root).forEach(c => c.onclick = () => {
+        const r = c.dataset.role, roles = ed.current.roles;
+        roles.includes(r) ? roles.splice(roles.indexOf(r), 1) : roles.push(r);
+        if (!ROLE_SUGGESTIONS.includes(r) && !roles.includes(r)) m.roles = m.roles.filter(x => x !== r);
+        renderRoles(); ed.schedule();
+      });
+    };
+    renderRoles();
+    const addRole = () => {
+      const v = $('#role-new', root).value.trim();
+      if (!v) return;
+      if (!ed.current.roles.includes(v)) ed.current.roles.push(v);
+      if (!m.roles.includes(v)) m.roles.push(v);
+      $('#role-new', root).value = ''; renderRoles(); ed.schedule();
+    };
+    $('#role-add', root).onclick = addRole;
+    $('#role-new', root).onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); addRole(); } };
+    // Réseaux sociaux (liste libre)
+    const addSocial = (url = '') => {
+      const row = document.createElement('div');
+      row.className = 'social-row';
+      row.innerHTML = `<span class="social-label">${esc(platformLabel(url))}</span>
+        <input type="url" value="${esc(url)}" placeholder="https://..." maxlength="500">
+        <button type="button" class="icon-btn danger" aria-label="Supprimer ce lien"><span class="material-icons">close</span></button>`;
+      const inp = $('input', row);
+      inp.oninput = () => { $('.social-label', row).textContent = platformLabel(inp.value.trim()); ed.schedule(); };
+      $('button', row).onclick = () => { row.remove(); ed.schedule(); };
+      $('#socials-list', root).appendChild(row);
+      return inp;
+    };
+    (m.socials || []).forEach(s => addSocial(s.url));
+    $('#social-add', root).onclick = () => addSocial().focus();
+    // Extrait musical
+    $('#song-test', root).onclick = async () => {
+      const info = $('#song-info', root), btn = $('#song-test', root);
+      if (!previewAudio.paused) { previewAudio.pause(); btn.innerHTML = '<span class="material-icons">play_arrow</span> Tester l\'extrait'; return; }
+      info.textContent = 'Recherche…';
+      try {
+        const r = await api('POST', '/api/admin/preview', { song: $('#f-song', root).value, songUrl: $('#f-songUrl', root).value });
+        if (!r.preview) { info.textContent = 'Aucun extrait trouvé : vérifie « Titre - Artiste » ou colle un lien Deezer.'; return; }
+        info.textContent = `Extrait : ${r.title} — ${r.artist}`;
+        previewAudio.src = r.preview; await previewAudio.play();
+        btn.innerHTML = '<span class="material-icons">pause</span> Pause';
+        previewAudio.onended = () => { btn.innerHTML = '<span class="material-icons">play_arrow</span> Tester l\'extrait'; };
+      } catch (err) { info.textContent = err.message; }
+    };
+  },
+  renderList: renderMembers,
+  afterSave: () => { renderGalleryChips(); renderGallery(); },
+});
+
+function renderMembers() {
+  const ul = $('#members-list');
+  if (!state.members.length) { ul.innerHTML = '<li class="empty">Aucun membre.</li>'; return; }
+  ul.innerHTML = state.members.map((m, i) => `
+    <li class="item ${membersEd.current?.id === m.id ? 'active' : ''}" draggable="true" data-id="${esc(m.id)}">
+      <span class="material-icons handle" aria-hidden="true">drag_indicator</span>
+      ${m.miniature || m.photo ? `<img src="/${esc(m.miniature || m.photo)}" alt="">` : '<div class="ph"><span class="material-icons">person</span></div>'}
+      <div class="meta"><div class="name">${esc(m.name || 'Sans nom')}</div>
+        <div class="sub">${etatBadge(m.etat)} ${esc((m.roles || []).join(' · '))}</div></div>
+      <button class="icon-btn" data-move="-1" aria-label="Monter" ${i === 0 ? 'disabled' : ''}><span class="material-icons">arrow_upward</span></button>
+      <button class="icon-btn" data-move="1" aria-label="Descendre" ${i === state.members.length - 1 ? 'disabled' : ''}><span class="material-icons">arrow_downward</span></button>
+    </li>`).join('');
+
+  $$('.item', ul).forEach(li => {
+    const id = li.dataset.id;
+    li.onclick = e => {
+      const mv = e.target.closest('[data-move]');
+      if (mv) { e.stopPropagation(); move(id, Number(mv.dataset.move)); return; }
+      membersEd.open(state.members.find(m => m.id === id));
+    };
+    li.ondragstart = e => { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
+    li.ondragover = e => { e.preventDefault(); li.classList.add('drag-over'); };
+    li.ondragleave = () => li.classList.remove('drag-over');
+    li.ondrop = e => {
+      e.preventDefault(); li.classList.remove('drag-over');
+      const from = state.members.findIndex(m => m.id === e.dataTransfer.getData('text/plain'));
+      const to = state.members.findIndex(m => m.id === id);
+      if (from < 0 || from === to) return;
+      const [it] = state.members.splice(from, 1);
+      state.members.splice(to, 0, it);
+      saveOrder();
+    };
+  });
+}
+function move(id, d) {
+  const i = state.members.findIndex(m => m.id === id), j = i + d;
+  if (j < 0 || j >= state.members.length) return;
+  [state.members[i], state.members[j]] = [state.members[j], state.members[i]];
+  saveOrder();
+}
+async function saveOrder() {
+  renderMembers();
+  try { await api('PUT', '/api/admin/members-order', { ids: state.members.map(m => m.id) }); toast('Ordre enregistré (visible tout de suite sur le site).'); }
+  catch (err) { toast(err.message, true); }
+}
+
+// ═══ Événements ═══
+const eventsEd = makeEditor({
+  name: 'events',
+  emptyHtml: '<p class="editor-empty">Sélectionne un événement ou clique sur « Nouveau ».</p>',
+  confirmDelete: e => `Supprimer l'événement « ${e.titre || 'sans titre'} » ?`,
+  form: e => `
+    <div class="row">
+      <div>${field('titre', 'Titre *', e.titre, 'maxlength="100" placeholder="Random Dance"')}</div>
+      <div>${field('sousTitre', 'Sous-titre', e.sousTitre, 'maxlength="100" placeholder="Spécial Halloween"')}</div>
+    </div>
+    <div class="row3">
+      <div><label for="f-date">Date *</label><input type="date" id="f-date" data-f="date" value="${esc(e.date)}"></div>
+      <div><label for="f-hd">Début</label><input type="time" id="f-hd" data-f="heureDebut" value="${esc(e.heureDebut)}"></div>
+      <div><label for="f-hf">Fin</label><input type="time" id="f-hf" data-f="heureFin" value="${esc(e.heureFin)}"></div>
+    </div>
+    <div class="row">
+      <div>${field('lieu', 'Lieu', e.lieu, 'maxlength="100" placeholder="Nom du lieu"')}</div>
+      <div>${field('adresse', 'Adresse', e.adresse, 'maxlength="200" placeholder="Rue, code postal, ville"')}</div>
+    </div>
+    <label for="f-description">Description (invités, programme…)</label>
+    <textarea id="f-description" data-f="description" maxlength="1500" placeholder="Avec … et …">${esc(e.description)}</textarea>
+    <label for="f-lien">Lien externe (billetterie, post…)</label>
+    <input type="url" id="f-lien" data-f="lien" value="${esc(e.lien)}" placeholder="https://...">
+    ${mediaZone('affiche,miniature', 'Affiche', e.miniature, true)}
+    <p class="hint">Les événements passent automatiquement dans « Événements passés » le lendemain de leur date.</p>`,
+  renderList: renderEvents,
+});
+
+function renderEvents() {
+  const ul = $('#events-list');
+  const t = today();
+  const list = [...state.events].sort((a, b) => {
+    const pa = !!a.date && a.date < t, pb = !!b.date && b.date < t;
+    if (pa !== pb) return pa ? 1 : -1;
+    return pa ? b.date.localeCompare(a.date) : (a.date || '9').localeCompare(b.date || '9');
+  });
+  if (!list.length) { ul.innerHTML = '<li class="empty">Aucun événement.</li>'; return; }
+  ul.innerHTML = list.map(e => {
+    const when = e.date && e.date < t ? '<span class="badge b-past">Passé</span>' : '';
+    return `<li class="item ${eventsEd.current?.id === e.id ? 'active' : ''}" data-id="${esc(e.id)}">
+      ${e.miniature ? `<img src="/${esc(e.miniature)}" alt="">` : '<div class="ph"><span class="material-icons">event</span></div>'}
+      <div class="meta"><div class="name">${esc([e.titre, e.sousTitre].filter(Boolean).join(' · ') || 'Sans titre')}</div>
+      <div class="sub">${etatBadge(e.etat)} ${when} ${esc(frDate(e.date))}</div></div></li>`;
+  }).join('');
+  $$('.item', ul).forEach(li => li.onclick = () => eventsEd.open(state.events.find(e => e.id === li.dataset.id)));
+}
+
+// ═══ Galerie ═══
+// Import d'abord, puis on dit qui est sur chaque photo, une par une.
+const memberName = id => state.members.find(m => m.id === id)?.name || '?';
+const photoKey = p => (p.date || p.dateAjout.slice(0, 10)) + p.dateAjout;
+const sortGallery = () => state.gallery.sort((a, b) => photoKey(b).localeCompare(photoKey(a)));
+const localDay = ms => { const d = new Date(ms); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+let galleryView = [];
+
+function renderGalleryChips() {
+  const f = $('#g-filter'), cur = f.value;
+  const untagged = state.gallery.filter(p => !p.members.length).length;
+  f.innerHTML = `<option value="">Toutes (${state.gallery.length})</option><option value="__none">Sans membre (${untagged})</option>` +
+    state.members.map(m => `<option value="${esc(m.id)}">${esc(m.name || 'Sans nom')} (${state.gallery.filter(p => p.members.includes(m.id)).length})</option>`).join('');
+  f.value = [...f.options].some(o => o.value === cur) ? cur : '';
+  const b = $('#g-untagged');
+  b.classList.toggle('hidden', !untagged);
+  b.innerHTML = `<span class="material-icons">sell</span> Taguer les ${untagged} photo${untagged > 1 ? 's' : ''} sans membre`;
+}
+function renderGallery() {
+  sortGallery();
+  const f = $('#g-filter').value;
+  galleryView = state.gallery.filter(p => !f || (f === '__none' ? !p.members.length : p.members.includes(f)));
+  $('#g-grid').innerHTML = galleryView.length ? galleryView.map((p, i) => `
+    <button type="button" class="gtile ${p.members.length ? '' : 'untagged'}" data-i="${i}">
+      <img src="/${esc(p.miniature)}" alt="" loading="lazy">
+      <span class="gnames">${p.members.length ? esc(p.members.map(memberName).join(', ')) : '⚠ à taguer'}</span>
+    </button>`).join('') : '<p class="empty" style="grid-column:1/-1">Aucune photo.</p>';
+  $$('#g-grid .gtile').forEach(t => t.onclick = () => openReview(galleryView, Number(t.dataset.i)));
+}
+$('#g-filter').onchange = renderGallery;
+$('#g-untagged').onclick = () => openReview(state.gallery.filter(p => !p.members.length), 0);
+
+async function uploadPhotos(files) {
+  files = [...files];
+  if (!files.length) return;
+  $('#up-err').textContent = '';
+  const bar = $('#up-progress'); bar.classList.remove('hidden'); $('div', bar).style.width = '0';
+  const fd = new FormData();
+  files.forEach(f => fd.append('files', f));
+  fd.append('dates', JSON.stringify(files.map(f => localDay(f.lastModified)))); // si la photo n'a pas de date EXIF
+  try {
+    const created = await uploadWithProgress('/api/admin/gallery', fd, r => { $('div', bar).style.width = Math.round(r * 90) + '%'; });
+    $('div', bar).style.width = '100%';
+    state.gallery.push(...created);
+    renderGalleryChips(); renderGallery();
+    openReview(created, 0);
+  } catch (err) { $('#up-err').textContent = err.message; }
+  setTimeout(() => bar.classList.add('hidden'), 800);
+}
+$('#up-pick').onclick = () => $('#up-files').click();
+$('#up-files').onchange = () => { uploadPhotos($('#up-files').files); $('#up-files').value = ''; };
+const drop = $('#up-drop');
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+drop.ondragleave = () => drop.classList.remove('over');
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); uploadPhotos(e.dataTransfer.files); };
+
+// ── Revue photo par photo ──
+const rv = { list: [], i: 0, timer: null, last: [] };
+const rvDlg = $('#review');
+const rvStatus = (t, c = '') => { const s = $('#rv-status'); s.textContent = t; s.className = 'status ' + c; };
+
+function openReview(list, i) {
+  if (!list.length) return;
+  rv.list = [...list]; rv.i = i; rv.last = [];
+  showReview();
+  if (!rvDlg.open) rvDlg.showModal();
+}
+function showReview() {
+  const p = rv.list[rv.i];
+  $('#rv-img').src = '/' + p.url;
+  $('#rv-count').textContent = `Photo ${rv.i + 1} / ${rv.list.length}`;
+  $('#rv-members').innerHTML = state.members.map((m, k) =>
+    `<button type="button" class="chip" data-id="${esc(m.id)}" aria-pressed="${p.members.includes(m.id)}">${k < 9 ? `<kbd>${k + 1}</kbd>` : ''}${esc(m.name || 'Sans nom')}</button>`).join('')
+    || '<span class="hint">Ajoute d\'abord des membres.</span>';
+  $$('#rv-members .chip').forEach(c => c.onclick = () => toggleMember(c.dataset.id));
+  $('#rv-date').value = p.date || '';
+  $('#rv-legende').value = p.legende || '';
+  const prev = rv.i > 0 ? rv.list[rv.i - 1].members : rv.last;
+  $('#rv-same').disabled = !prev.length;
+  $('#rv-prev').disabled = rv.i === 0;
+  $('#rv-next').innerHTML = rv.i === rv.list.length - 1 ? 'Terminer <span class="material-icons">check</span>' : 'Suivante <span class="material-icons">arrow_forward</span>';
+  rvStatus(p.members.length ? 'Enregistré' : 'À taguer', p.members.length ? 'ok' : 'busy');
+  const next = rv.list[rv.i + 1]; if (next) new Image().src = '/' + next.url; // préchargement
+}
+function toggleMember(id) {
+  const p = rv.list[rv.i];
+  p.members = p.members.includes(id) ? p.members.filter(x => x !== id) : [...p.members, id];
+  $(`#rv-members .chip[data-id="${CSS.escape(id)}"]`)?.setAttribute('aria-pressed', String(p.members.includes(id)));
+  scheduleRv();
+}
+function scheduleRv() { clearTimeout(rv.timer); rvStatus('Modifications…', 'busy'); rv.timer = setTimeout(saveRv, 500); }
+async function saveRv() {
+  clearTimeout(rv.timer); rv.timer = null;
+  const p = rv.list[rv.i];
+  if (!p) return;
+  p.legende = $('#rv-legende').value; p.date = $('#rv-date').value;
+  try {
+    const saved = await api('PUT', `/api/admin/gallery/${p.id}`, { members: p.members, legende: p.legende, date: p.date });
+    Object.assign(p, saved);
+    const g = state.gallery.find(x => x.id === p.id); if (g && g !== p) Object.assign(g, saved);
+    rvStatus('Enregistré', 'ok');
+  } catch (err) { rvStatus(err.message, 'err'); }
+}
+async function goReview(d) {
+  if (rv.timer) await saveRv();
+  rv.last = rv.list[rv.i].members;
+  const j = rv.i + d;
+  if (j >= rv.list.length) return rvDlg.close();
+  if (j < 0) return;
+  rv.i = j; showReview();
+}
+$('#rv-prev').onclick = () => goReview(-1);
+$('#rv-next').onclick = () => goReview(1);
+$('#rv-same').onclick = () => {
+  const p = rv.list[rv.i];
+  p.members = [...(rv.i > 0 ? rv.list[rv.i - 1].members : rv.last)];
+  showReview(); scheduleRv();
+};
+$('#rv-date').oninput = scheduleRv;
+$('#rv-legende').oninput = scheduleRv;
+$('#rv-del').onclick = async () => {
+  const p = rv.list[rv.i];
+  if (!confirm('Supprimer définitivement cette photo ?')) return;
+  try {
+    await api('DELETE', `/api/admin/gallery/${p.id}`);
+    state.gallery = state.gallery.filter(x => x.id !== p.id);
+    rv.list.splice(rv.i, 1);
+    if (!rv.list.length) return rvDlg.close();
+    rv.i = Math.min(rv.i, rv.list.length - 1); showReview();
+  } catch (err) { rvStatus(err.message, 'err'); }
+};
+$('#rv-close').onclick = () => rvDlg.close();
+rvDlg.addEventListener('close', async () => {
+  if (rv.timer) await saveRv();
+  renderGalleryChips(); renderGallery();
+  if (membersEd.current?.id) membersEd.open(state.members.find(m => m.id === membersEd.current.id)); // rafraîchit le choix de photo de profil
+});
+rvDlg.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) { if (e.key === 'Enter') { e.preventDefault(); goReview(1); } return; }
+  if (e.key === 'ArrowRight' || e.key === 'Enter') { e.preventDefault(); goReview(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); goReview(-1); }
+  else if (/^[1-9]$/.test(e.key)) { const m = state.members[Number(e.key) - 1]; if (m) toggleMember(m.id); }
+});
+
+// ═══ Vidéos ═══
+function heroValues() {
+  const id = ytId($('#hero-url').value) || $('#hero-select').value;
+  return { videoId: id, start: toSec($('#hero-start').value), end: toSec($('#hero-end').value) };
+}
+function heroPreview() {
+  const h = heroValues();
+  if (!h.videoId) return;
+  $('#hero-preview').src = `https://www.youtube-nocookie.com/embed/${h.videoId}?autoplay=1&mute=1&controls=1&rel=0&start=${h.start || 0}${h.end ? '&end=' + h.end : ''}`;
+}
+function renderVideos() {
+  const v = state.videos, s = state.settings;
+  const items = v.items;
+  const hero = s.hero;
+  const shownItems = items.filter(x => !x.short && !s.hiddenVideos.includes(x.id));
+  const known = shownItems.some(x => x.id === hero.videoId);
+  $('#hero-select').innerHTML = (known ? '' : `<option value="${esc(hero.videoId)}">Vidéo actuelle (${esc(items.find(x => x.id === hero.videoId)?.title || hero.videoId)})</option>`) +
+    shownItems.map(x => `<option value="${esc(x.id)}">${esc(x.title || x.id)}</option>`).join('');
+  $('#hero-select').value = hero.videoId;
+  $('#hero-start').value = fmtSec(hero.start);
+  $('#hero-end').value = fmtSec(hero.end);
+  $('#hero-url').value = '';
+
+  $('#v-info').textContent = v.updatedAt
+    ? `Synchronisée automatiquement toutes les heures · dernière mise à jour : ${new Date(v.updatedAt).toLocaleString('fr-FR')} · décoche une vidéo pour la masquer du site.`
+    : 'Pas encore synchronisée avec YouTube : clique sur « Actualiser ».';
+  $('#v-list').innerHTML = items.map(x => {
+    const shown = !x.short && !s.hiddenVideos.includes(x.id);
+    return `<div class="vcard ${shown ? '' : 'off'}">
+      <img src="https://i.ytimg.com/vi/${esc(x.id)}/mqdefault.jpg" alt="" loading="lazy">
+      <div class="vb"><div class="vt">${esc(x.title || x.id)}</div>
+        <div class="vf"><span>${x.published ? new Date(x.published).toLocaleDateString('fr-FR') : ''}${x.short ? ' · Short (masqué)' : ''}</span>
+        ${x.short ? '' : `<label class="toggle"><input type="checkbox" data-vid="${esc(x.id)}" ${shown ? 'checked' : ''}> Affichée</label>`}</div></div></div>`;
+  }).join('') || '<p class="empty">Aucune vidéo.</p>';
+  $$('[data-vid]').forEach(cb => cb.onchange = async () => {
+    const hidden = new Set(state.settings.hiddenVideos);
+    cb.checked ? hidden.delete(cb.dataset.vid) : hidden.add(cb.dataset.vid);
+    try { state.settings = await api('PUT', '/api/admin/settings', { hiddenVideos: [...hidden] }); renderVideos(); }
+    catch (err) { toast(err.message, true); cb.checked = !cb.checked; }
+  });
+}
+$('#hero-select').onchange = () => { $('#hero-url').value = ''; heroPreview(); };
+$('#hero-test').onclick = heroPreview;
+$('#hero-save').onclick = async () => {
+  const h = heroValues();
+  const st = $('#hero-status');
+  if (!h.videoId) { st.textContent = 'Lien YouTube invalide'; st.className = 'status err'; return; }
+  if (isNaN(h.start) || isNaN(h.end)) { st.textContent = 'Temps invalide (format m:ss)'; st.className = 'status err'; return; }
+  st.textContent = 'Enregistrement…'; st.className = 'status busy';
+  try {
+    state.settings = await api('PUT', '/api/admin/settings', { hero: h });
+    st.textContent = 'Enregistré ✓'; st.className = 'status ok';
+    renderVideos(); heroPreview();
+  } catch (err) { st.textContent = err.message; st.className = 'status err'; }
+};
+$('#v-refresh').onclick = async () => {
+  const b = $('#v-refresh'); b.disabled = true;
+  try { state.videos = await api('POST', '/api/admin/videos/refresh'); renderVideos(); toast('Vidéos à jour.'); }
+  catch (err) { toast(err.message, true); }
+  b.disabled = false;
+};
+
+// ═══ Démarrage ═══
+$$('[data-new]').forEach(b => b.onclick = () => (b.dataset.new === 'members' ? membersEd : eventsEd).open(null));
+
+async function start() {
+  try {
+    const [members, events, gallery, settings, videos] = await Promise.all(
+      ['members', 'events', 'gallery', 'settings', 'videos'].map(n => api('GET', `/api/admin/${n}`)));
+    Object.assign(state, { members, events, gallery, settings, videos });
+  } catch (err) { if (token) toast(err.message, true); return; }
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  $('#members-editor').innerHTML = '<p class="editor-empty">Sélectionne un membre ou clique sur « Nouveau ».</p>';
+  $('#events-editor').innerHTML = '<p class="editor-empty">Sélectionne un événement ou clique sur « Nouveau ».</p>';
+  renderMembers(); renderEvents(); renderGalleryChips(); renderGallery(); renderVideos();
+  let tab = 'members'; try { tab = localStorage.getItem('bs-admin-tab') || tab; } catch {}
+  openTab(tab);
+}
+
+// Avertir si on quitte avec une sauvegarde en attente
+window.addEventListener('beforeunload', e => {
+  if ([membersEd, eventsEd].some(ed => ed.timer && $('.status.busy'))) { e.preventDefault(); e.returnValue = ''; }
+});
+
+if (token) api('GET', '/api/auth/check').then(start).catch(() => showLogin());
+else showLogin();
+})();
+</script>
+</body>
+</html>

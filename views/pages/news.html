@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {{> head}}
+    <script type="application/ld+json">{{{jsonLd}}}</script>
+</head>
+<body class="scanlines page-flex">
+    {{> nav}}
+
+    <main id="events" class="py-20 bg-black y2k-grid-bg border-t-2">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 y2k-font pt-10">Événements à venir</h1>
+                <p class="text-xl text-gray-300 mt-6 max-w-2xl mx-auto">Venez nous voir performer !</p>
+            </div>
+            <div class="space-y-10">
+                {{{upcoming}}}
+            </div>
+            {{{past}}}
+        </div>
+    </main>
+
+    {{> footer}}
+</body>
+</html>

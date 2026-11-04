@@ -1,0 +1,20 @@
+[
+  {
+    "id": "halloween26",
+    "titre": "Random Dance",
+    "theme": "Halloween",
+    "date": "2026-11-07",
+    "heureDebut": "14:00",
+    "heureFin": "17:00",
+    "lieu": "Chaud Bouillon",
+    "adresse": "70 Pass. de l'Internationale, 59000 Lille",
+    "invites": "Asone et Ocerys Crew",
+    "description": "",
+    "lien": "",
+    "affiche": "",
+    "miniature": "",
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  }
+]

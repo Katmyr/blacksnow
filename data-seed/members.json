@@ -1,0 +1,97 @@
+[
+  {
+    "id": "julie01",
+    "name": "JULIE",
+    "role": "Présidente / Danseuse / Chanteuse",
+    "description": "Leader dans l'âme, danseuse expérimentée et championne du lancer de chaussure.",
+    "song": "No - CLC",
+    "photo": "images/julie.png",
+    "miniature": "images/julie.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/juliemarouset",
+      "tiktok": "https://www.tiktok.com/@ju_dansetok"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "soo00001",
+    "name": "SOO",
+    "role": "Trésorière / Danseuse",
+    "description": "Personnalité explosive, souriante mais un peu trop pipelette parfois...",
+    "song": "Passion fruit - Jeff Sature",
+    "photo": "images/soo.png",
+    "miniature": "images/soo.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/so_solveig_12/"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "marie001",
+    "name": "MARIE",
+    "role": "Danseuse / Chanteuse",
+    "description": "Métalleuse, elle vient d'un pays froid mais a une voix et une énergie on fire.",
+    "song": "Tomboy - (G)I-DLE",
+    "photo": "images/marie.png",
+    "miniature": "images/marie.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/_punkyskull_/"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "gemma001",
+    "name": "GEMMA",
+    "role": "Danseuse / Chanteuse",
+    "description": "Pour elle, tout ça n'est qu'un jeu dont elle est le boss final (ou la boss lady).",
+    "song": "Laffy Taffy - Esther Yu",
+    "photo": "images/gemma.png",
+    "miniature": "images/gemma.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/wanjing_tiaowu_/",
+      "youtube": "https://www.youtube.com/@GL02Music",
+      "xiaohongshu": "https://www.xiaohongshu.com/user/profile/627bd6930000000021023cca",
+      "bilibili": "https://m.bilibili.com/space/3546571582999182"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "laurine1",
+    "name": "LAURINE",
+    "role": "Secrétaire / Danseuse",
+    "description": "Championne du multitâche, entrepreneuse et artiste qui saura mettre des paillettes dans vos vies.",
+    "song": "Stress - ChungHa",
+    "photo": "images/laurine.png",
+    "miniature": "images/laurine.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/laurine.u",
+      "tiktok": "https://www.tiktok.com/@laurine.lfb"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  },
+  {
+    "id": "helene01",
+    "name": "HELENE",
+    "role": "Danseuse / Chanteuse",
+    "description": "J'ai fait le site je veux pas me jeter des fleurs vous verrez par vous même bisous.",
+    "song": "New Woman - LISA, ROSALÍA",
+    "photo": "images/helene.png",
+    "miniature": "images/helene.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/wearegingerpearl/"
+    },
+    "statut": "publie",
+    "dateAjout": "2026-11-03T00:00:00.000Z",
+    "dateModification": "2026-11-03T00:00:00.000Z"
+  }
+]

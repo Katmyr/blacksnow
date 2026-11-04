@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {{> head}}
+    <script type="application/ld+json">{{{jsonLd}}}</script>
+    <style>
+        #yt-bg-wrap { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background: #151515; }
+        #yt-bg-wrap iframe { position: absolute; top: 50%; left: 50%; width: 177.78vh; height: 56.25vw; min-width: 100%; min-height: 100%; transform: translate(-50%, -50%); border: none; }
+        #yt-bg-overlay { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: linear-gradient(to bottom, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.65) 100%); }
+        #about { background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.6) 15%, rgba(0,0,0,.88) 35%, rgba(0,0,0,.95) 100%) !important; }
+    </style>
+</head>
+<body class="scanlines home">
+    {{> nav}}
+
+    <main>
+        <section id="home" class="relative min-h-screen flex items-center justify-center pt-16">
+            <div id="yt-bg-wrap" aria-hidden="true"><div id="yt-player"></div></div>
+            <div id="yt-bg-overlay"></div>
+
+            <div class="container mx-auto px-6 z-10 text-center">
+                <h1 class="sr-only">BLACKSNOW, crew de danse K-Pop à Lille</h1>
+                <img src="/logo.svg" class="logo-hero" alt="Logo BLACKSNOW" width="600" height="300">
+                <p class="text-xl md:text-3xl mb-10 max-w-3xl mx-auto text-gray-300 font-bold">CREW DE DANSE K-POP SUR LILLE</p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <a href="/videos" class="y2k-btn">
+                        <span class="material-icons" aria-hidden="true">ondemand_video</span> NOS VIDÉOS
+                    </a>
+                    <a href="/news" class="y2k-btn is-neon">
+                        <span class="material-icons" aria-hidden="true">event</span> PROCHAINS ÉVÉNEMENTS
+                    </a>
+                </div>
+            </div>
+
+            <div class="absolute bottom-10 left-0 right-0 flex justify-center" style="z-index:10;">
+                <a href="#about" class="animate-bounce" aria-label="Descendre vers la présentation">
+                    <div class="w-10 h-10 border-2 rounded-full flex items-center justify-center"><span class="material-icons" aria-hidden="true">expand_more</span></div>
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-black y2k-grid-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6 y2k-font">Qui sommes-nous ?</h2>
+                </div>
+                <div class="flex flex-col lg:flex-row items-center gap-12">
+                    <div class="lg:w-1/2">
+                        <div class="relative rounded-lg overflow-hidden border-2 border-neon-blue">
+                            <img src="/images/groupe.png" alt="Les membres de BLACKSNOW réunies" class="w-full h-auto" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <p class="text-gray-300 mb-8 text-xl">
+                            BLACKSNOW est un crew de danse lillois formé en 2016, devenu une association en 2021. Passionnées par la pop coréenne, nous reprenons des chansons et chorégraphies issues de la K-Pop, que nous filmons et performons sur scène, lors de conventions ou de festivals par exemple.<br><br>
+                            Intéressé·e pour nous rejoindre ou nous inviter à un événement ?
+                        </p>
+                        <a href="/contact" class="y2k-btn is-neon">NOUS CONTACTER</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {{> footer}}
+
+    <script id="hero-data" type="application/json">{{{heroJson}}}</script>
+    <script src="/js/hero.js?v={{v}}" defer></script>
+</body>
+</html>

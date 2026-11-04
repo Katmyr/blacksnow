@@ -1,0 +1,37 @@
+<div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+    <div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+    <div class="snowflake" aria-hidden="true">❅</div>
+    <div class="snowflake" aria-hidden="true">❆</div>
+
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+        <button class="absolute top-6 right-6 text-3xl" id="closeMenu" aria-label="Fermer le menu">
+            <span class="material-icons" style="font-size:2rem;">close</span>
+        </button>
+        <nav class="flex flex-col items-center space-y-8 text-2xl" aria-label="Menu mobile">
+            <a href="/" class="text-white">ACCUEIL</a>
+            <a href="/membres" class="text-white">MEMBRES</a>
+            <a href="/news" class="text-white">ACTUALITÉS</a>
+            <a href="/videos" class="text-white">VIDÉOS</a>
+            <a href="/contact" class="text-white">CONTACT</a>
+        </nav>
+    </div>
+
+    <header class="site-header fixed w-full z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" aria-label="BLACKSNOW, accueil"><img src="/logo.svg" class="logo-header" alt="BLACKSNOW" width="170" height="85"></a>
+                <nav class="hidden md:flex items-center space-x-8" aria-label="Navigation principale">
+                    <a href="/" class="text-white transition duration-300">ACCUEIL</a>
+                    <a href="/membres" class="text-white transition duration-300">MEMBRES</a>
+                    <a href="/news" class="text-white transition duration-300">ACTUALITÉS</a>
+                    <a href="/videos" class="text-white transition duration-300">VIDÉOS</a>
+                    <a href="/contact" class="y2k-btn sm">CONTACT</a>
+                </nav>
+                <button id="openMenu" class="md:hidden flex items-center justify-center text-white" aria-label="Ouvrir le menu" aria-controls="mobileMenu" aria-expanded="false">
+                    <span class="material-icons" style="font-size:2rem;">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
