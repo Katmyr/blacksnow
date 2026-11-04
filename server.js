@@ -25,6 +25,13 @@ const SITE_URL = (process.env.SITE_URL || 'https://blacksnowdancecrew.fr').repla
 const YT_HANDLE = process.env.YT_HANDLE || 'blacksnow_dancecrew';
 const IS_PROD = process.env.NODE_ENV === 'production';
 const NEW_BADGE_DAYS = 45;
+// Publication du site public (GitHub Pages)
+const BUILD_DIR = path.resolve(process.env.BUILD_DIR || path.join(ROOT, '_build'));
+const DEPLOY_REPO = process.env.DEPLOY_REPO || '';           // ex. git@github.com:asso/blacksnow.git (vide = build local seulement)
+const DEPLOY_BRANCH = process.env.DEPLOY_BRANCH || 'gh-pages';
+const DEPLOY_SSH_KEY = process.env.DEPLOY_SSH_KEY || '';     // optionnel : chemin d'une clé SSH dédiée
+const ADMIN_URL = (process.env.ADMIN_URL || '').replace(/\/$/, ''); // ex. https://blacksnow.alwaysdata.net
+const CRON_TOKEN = process.env.CRON_TOKEN || '';
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 if (ADMIN_PASSWORD.length < 12) {
@@ -359,9 +366,13 @@ function refreshVideos() {
         if (r.ok) v.title = (await r.json()).title || '';
       } catch {}
     }
+    const before = JSON.stringify(db.videos.items);
     db.videos.items = [...byId.values()].sort((a, b) => (b.published || '').localeCompare(a.published || ''));
     db.videos.updatedAt = new Date().toISOString();
     await save('videos');
+    const changed = before !== JSON.stringify(db.videos.items);
+    if (changed) scheduleDeploy();
+    return changed;
   })().catch(err => { console.warn('⚠ Vidéos YouTube non mises à jour :', err.message); throw err; })
     .finally(() => { refreshing = null; });
   return refreshing;
@@ -384,9 +395,11 @@ function assetVersion() {
   }
   return (assetV = h.digest('hex').slice(0, 8));
 }
+const renderCtx = { apiBase: '' }; // '' = même serveur ; en build statique : ADMIN_URL
 function render(page, vars) {
   const all = {
     v: assetVersion(),
+    apiBase: renderCtx.apiBase,
     canonical: SITE_URL + (vars.path || '/'),
     ogImage: `${SITE_URL}/images/groupe.png`,
     year: new Date().getFullYear(),
@@ -601,6 +614,137 @@ const pages = {
   },
 };
 
+function robotsTxt() {
+  return `User-agent: *\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+}
+function sitemapXml() {
+  const last = list => list.map(x => x.publishedAt || '').sort().pop()?.slice(0, 10);
+  const lastmod = { '/membres': last(db.members), '/news': last(db.events), '/videos': db.videos.updatedAt?.slice(0, 10) };
+  const urls = Object.keys(ROUTES).map(r => `  <url><loc>${SITE_URL}${r === '/' ? '/' : r}</loc>${lastmod[r] ? `<lastmod>${lastmod[r]}</lastmod>` : ''}</url>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+const page404 = p => render('404', { path: p, title: 'Page introuvable ❅ BLACKSNOW', description: 'Cette page n\'existe pas.' });
+const ROUTES = { '/': 'index', '/membres': 'membres', '/news': 'news', '/videos': 'videos', '/contact': 'contact', '/cgu': 'cgu' };
+
+// ── Publication : fabrique le site statique et l'envoie sur GitHub Pages ─
+// Le site public est une copie figée des pages. Elle est régénérée et poussée
+// sur la branche DEPLOY_BRANCH après chaque changement visible.
+const { execFile } = require('child_process');
+const DEPLOY_STATE_FILE = path.join(DATA_DIR, 'deploy.json');
+const deploy = { state: 'idle', message: '', lastOkAt: null, lastDay: null, timer: null, running: false, again: false };
+try { Object.assign(deploy, JSON.parse(fs.readFileSync(DEPLOY_STATE_FILE, 'utf8'))); deploy.state = 'idle'; } catch {}
+
+function git(args) {
+  const env = { ...process.env, GIT_TERMINAL_PROMPT: '0' };
+  if (DEPLOY_SSH_KEY) env.GIT_SSH_COMMAND = `ssh -i ${DEPLOY_SSH_KEY} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new`;
+  return new Promise((resolve, reject) => execFile('git', args, { cwd: BUILD_DIR, env, maxBuffer: 10e6, timeout: 10 * 60e3 }, (err, stdout, stderr) => {
+    if (!err) return resolve(stdout);
+    const msg = (stderr || err.message).trim().split('\n').slice(-3).join(' ');
+    reject(Object.assign(new Error(msg), { code: err.code }));
+  }));
+}
+
+// Fichiers du dossier uploads/ visibles publiquement (rien des brouillons)
+function publicUploads() {
+  const set = new Set();
+  const members = publishedMembers();
+  const ids = new Set(members.map(m => m.id));
+  for (const m of members) urlsOf(m).forEach(u => set.add(u));
+  for (const e of publishedEvents()) urlsOf(e).forEach(u => set.add(u));
+  for (const p of db.gallery) if (p.members.some(id => ids.has(id))) { set.add(p.url); set.add(p.miniature); }
+  return set;
+}
+
+async function linkOrCopy(src, dest) {
+  await fsp.mkdir(path.dirname(dest), { recursive: true });
+  try { await fsp.link(src, dest); } catch { await fsp.copyFile(src, dest); } // lien physique : pas de double stockage
+}
+async function copyDir(src, dest, skip = () => false) {
+  for (const ent of await fsp.readdir(src, { withFileTypes: true })) {
+    const s = path.join(src, ent.name), d = path.join(dest, ent.name);
+    if (skip(s)) continue;
+    if (ent.isDirectory()) await copyDir(s, d, skip);
+    else if (ent.isFile()) await linkOrCopy(s, d);
+  }
+}
+const redirectPage = (to, title) => `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>${esc(title)}</title><meta http-equiv="refresh" content="0;url=${esc(to)}"><link rel="canonical" href="${esc(to)}"></head><body><a href="${esc(to)}">${esc(title)}</a></body></html>`;
+
+async function buildSite() {
+  await fsp.mkdir(BUILD_DIR, { recursive: true });
+  for (const name of await fsp.readdir(BUILD_DIR)) if (name !== '.git') await fsp.rm(path.join(BUILD_DIR, name), { recursive: true, force: true });
+  // 1. fichiers fixes (css, js, images, logo, favicon), sans les uploads
+  await copyDir(PUBLIC_DIR, BUILD_DIR, s => path.resolve(s) === UPLOAD_DIR || path.basename(s).startsWith('.'));
+  // 2. uploads publiés uniquement
+  for (const u of publicUploads()) {
+    const src = path.join(UPLOAD_DIR, path.basename(u));
+    if (fs.existsSync(src)) await linkOrCopy(src, path.join(BUILD_DIR, 'uploads', path.basename(u)));
+  }
+  // 3. pages
+  renderCtx.apiBase = ADMIN_URL;
+  try {
+    for (const [route, name] of Object.entries(ROUTES)) {
+      await fsp.writeFile(path.join(BUILD_DIR, route === '/' ? 'index.html' : `${name}.html`), pages[name]());
+    }
+    await fsp.writeFile(path.join(BUILD_DIR, '404.html'), page404('/404'));
+  } finally { renderCtx.apiBase = ''; }
+  await fsp.writeFile(path.join(BUILD_DIR, 'robots.txt'), robotsTxt());
+  await fsp.writeFile(path.join(BUILD_DIR, 'sitemap.xml'), sitemapXml());
+  await fsp.writeFile(path.join(BUILD_DIR, 'galerie.html'), redirectPage('/membres', 'Membres BLACKSNOW'));
+  if (ADMIN_URL) await fsp.writeFile(path.join(BUILD_DIR, 'admin.html'), redirectPage(`${ADMIN_URL}/admin`, 'Espace de gestion'));
+  await fsp.writeFile(path.join(BUILD_DIR, '.nojekyll'), '');
+  await fsp.writeFile(path.join(BUILD_DIR, 'CNAME'), new URL(SITE_URL).hostname + '\n');
+}
+
+async function pushSite() {
+  if (!fs.existsSync(path.join(BUILD_DIR, '.git'))) {
+    await git(['init', '-q']);
+    await git(['checkout', '-q', '-b', DEPLOY_BRANCH]);
+  }
+  try { await git(['remote', 'set-url', 'origin', DEPLOY_REPO]); } catch { await git(['remote', 'add', 'origin', DEPLOY_REPO]); }
+  await git(['add', '-A']);
+  let changed = true;
+  try { await git(['diff', '--cached', '--quiet']); changed = false; } catch {}
+  if (changed) {
+    await git(['-c', 'user.name=BLACKSNOW (admin du site)', '-c', 'user.email=blacksnowdance@gmail.com',
+      'commit', '-q', '-m', `Mise à jour du site — ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}`]);
+  }
+  // --force : ce dossier est la seule source de la branche publiée
+  await git(['push', '-q', '--force', 'origin', `HEAD:${DEPLOY_BRANCH}`]);
+  return changed;
+}
+
+async function runDeploy() {
+  if (deploy.running) { deploy.again = true; return; }
+  deploy.running = true; deploy.again = false;
+  deploy.state = 'building'; deploy.message = 'Fabrication du site…';
+  try {
+    await buildSite();
+    if (DEPLOY_REPO) {
+      deploy.message = 'Envoi sur GitHub…';
+      const changed = await pushSite();
+      deploy.message = changed ? 'Envoyé : en ligne d\'ici 1 à 2 minutes.' : 'Déjà à jour.';
+    } else {
+      deploy.message = 'Site fabriqué dans _build/ (envoi désactivé : DEPLOY_REPO vide).';
+    }
+    deploy.state = 'ok'; deploy.lastOkAt = new Date().toISOString(); deploy.lastDay = todayParis();
+    await fsp.writeFile(DEPLOY_STATE_FILE, JSON.stringify({ lastOkAt: deploy.lastOkAt, lastDay: deploy.lastDay }));
+  } catch (err) {
+    deploy.state = 'error'; deploy.message = err.message;
+    console.error('✖ Publication du site :', err.message);
+  } finally {
+    deploy.running = false;
+    if (deploy.again) scheduleDeploy(0);
+  }
+}
+// Regroupe les changements rapprochés (ex. tag de plusieurs photos) en une seule publication
+function scheduleDeploy(delay = 4000) {
+  if (deploy.running) { deploy.again = true; return; }
+  clearTimeout(deploy.timer);
+  deploy.state = 'pending'; deploy.message = 'Mise en ligne dans quelques secondes…';
+  deploy.timer = setTimeout(runDeploy, delay);
+}
+const deployStatus = () => ({ state: deploy.state, message: deploy.message, lastOkAt: deploy.lastOkAt, remote: !!DEPLOY_REPO, siteUrl: SITE_URL });
+
 // ── Application Express ────────────────────────────────────────────────
 const app = express();
 app.disable('x-powered-by');
@@ -632,8 +776,9 @@ app.use(express.static(PUBLIC_DIR, {
   setHeaders: (res, file, stat) => res.set('Cache-Control', /\.(css|js)$/.test(file) ? 'public, max-age=31536000, immutable' : (IS_PROD ? 'public, max-age=604800' : 'no-cache')),
 }));
 
-// Pages publiques (rendues côté serveur → contenu lisible par Google)
-const ROUTES = { '/': 'index', '/membres': 'membres', '/news': 'news', '/videos': 'videos', '/contact': 'contact', '/cgu': 'cgu' };
+// Aperçu du site public sur ce serveur (le vrai site public est la copie sur GitHub Pages)
+const SITE_HOST = new URL(SITE_URL).hostname;
+app.use((req, res, next) => { if (req.hostname !== SITE_HOST) res.set('X-Robots-Tag', 'noindex'); next(); });
 for (const [route, page] of Object.entries(ROUTES)) {
   app.get(route, (req, res) => {
     res.set('Cache-Control', 'public, max-age=60');
@@ -641,20 +786,8 @@ for (const [route, page] of Object.entries(ROUTES)) {
   });
 }
 
-app.get('/robots.txt', (req, res) => {
-  res.type('text/plain').send(`User-agent: *\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
-});
-
-app.get('/sitemap.xml', (req, res) => {
-  const last = list => list.map(x => x.publishedAt || '').sort().pop()?.slice(0, 10);
-  const lastmod = {
-    '/membres': last(db.members),
-    '/news': last(db.events),
-    '/videos': db.videos.updatedAt?.slice(0, 10),
-  };
-  const urls = Object.keys(ROUTES).map(r => `  <url><loc>${SITE_URL}${r === '/' ? '/' : r}</loc>${lastmod[r] ? `<lastmod>${lastmod[r]}</lastmod>` : ''}</url>`).join('\n');
-  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
-});
+app.get('/robots.txt', (req, res) => res.type('text/plain').send(robotsTxt()));
+app.get('/sitemap.xml', (req, res) => res.type('application/xml').send(sitemapXml()));
 
 // Admin
 app.get('/admin', (req, res) => {
@@ -720,6 +853,7 @@ for (const [name, build] of [['members', buildMember], ['events', buildEvent]]) 
     item.publishedAt = new Date().toISOString();
     await save(name);
     await deleteIfOrphan(urlsOf(oldPublished));
+    scheduleDeploy();
     res.json(decorate(name, item));
   }));
   // Retirer du site (repasse en brouillon, rien n'est supprimé)
@@ -729,6 +863,7 @@ for (const [name, build] of [['members', buildMember], ['events', buildEvent]]) 
     item.published = null; item.publishedAt = null;
     await save(name);
     await deleteIfOrphan(urlsOf(old));
+    scheduleDeploy();
     res.json(decorate(name, item));
   }));
   // Annuler les modifications non publiées
@@ -756,6 +891,7 @@ for (const [name, build] of [['members', buildMember], ['events', buildEvent]]) 
     if (i < 0) throw httpError(404, 'Élément introuvable.');
     const [old] = db[name].splice(i, 1);
     await save(name);
+    if (old.published) scheduleDeploy();
     if (name === 'members') { // retirer ce membre des photos de la galerie
       for (const p of db.gallery) p.members = p.members.filter(id => id !== old.id);
       await save('gallery');
@@ -770,17 +906,19 @@ app.put('/api/admin/members-order', requireAuth, json, wrap(async (req, res) => 
   const rank = new Map(ids.map((id, i) => [id, i]));
   db.members.sort((a, b) => (rank.get(a.id) ?? 1e9) - (rank.get(b.id) ?? 1e9));
   await save('members');
+  scheduleDeploy();
   res.json({ ok: true });
 }));
 
 // ── Extrait musical ────────────────────────────────────────────────────
 app.get('/api/preview/:id', wrap(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*'); // appelé depuis le site public (autre domaine)
   const m = publishedMembers().find(x => x.id === req.params.id);
   if (!m?.song) throw httpError(404, 'Pas de chanson.');
   let data = null;
   try { data = await findPreview(m.song, m.songUrl); } catch {}
   if (!data) throw httpError(404, 'Extrait introuvable.');
-  res.set('Cache-Control', 'public, max-age=600').json(data);
+  res.set({ 'Cache-Control': 'public, max-age=600', 'Access-Control-Allow-Origin': '*' }).json(data);
 }));
 app.post('/api/admin/preview', requireAuth, json, wrap(async (req, res) => {
   let data = null;
@@ -820,6 +958,7 @@ app.post('/api/admin/gallery', requireAuth, upload.array('files', 60), wrap(asyn
   }
   db.gallery.push(...created);
   await save('gallery');
+  if (members.length) scheduleDeploy();
   res.status(201).json(created);
 }));
 
@@ -830,6 +969,7 @@ app.put('/api/admin/gallery/:id', requireAuth, json, wrap(async (req, res) => {
   if ('legende' in req.body) p.legende = str(req.body.legende, 200);
   if ('date' in req.body) p.date = isDay(req.body.date) ? req.body.date : '';
   await save('gallery');
+  scheduleDeploy();
   res.json(p);
 }));
 
@@ -838,6 +978,7 @@ app.delete('/api/admin/gallery/:id', requireAuth, wrap(async (req, res) => {
   if (i < 0) throw httpError(404, 'Photo introuvable.');
   const [old] = db.gallery.splice(i, 1);
   await save('gallery');
+  scheduleDeploy();
   await deleteIfOrphan(urlsOf(old));
   res.json({ ok: true });
 }));
@@ -857,6 +998,7 @@ app.put('/api/admin/settings', requireAuth, json, wrap(async (req, res) => {
   }
   if (Array.isArray(b.hiddenVideos)) db.settings.hiddenVideos = b.hiddenVideos.filter(id => /^[\w-]{11}$/.test(id));
   await save('settings');
+  scheduleDeploy();
   res.json(db.settings);
 }));
 
@@ -866,11 +1008,24 @@ app.post('/api/admin/videos/refresh', requireAuth, wrap(async (req, res) => {
   res.json(db.videos);
 }));
 
+// ── Publication : statut, republier, tâche planifiée ──────────────────
+app.get('/api/admin/deploy', requireAuth, noStore, (req, res) => res.json(deployStatus()));
+app.post('/api/admin/deploy', requireAuth, (req, res) => { scheduleDeploy(0); res.json(deployStatus()); });
+
+// À appeler toutes les heures (tâche planifiée Alwaysdata) : vidéos YouTube + passage des événements en « passés »
+app.get('/api/cron', wrap(async (req, res) => {
+  const ok = CRON_TOKEN.length >= 16 && typeof req.query.token === 'string' && req.query.token.length === CRON_TOKEN.length
+    && crypto.timingSafeEqual(Buffer.from(req.query.token), Buffer.from(CRON_TOKEN));
+  if (!ok) throw httpError(403, 'Jeton invalide.');
+  let videos = 'inchangées';
+  try { videos = (await refreshVideos()) ? 'mises à jour' : 'inchangées'; } catch (err) { videos = `erreur (${err.message})`; }
+  if (deploy.lastDay !== todayParis() && deploy.state !== 'pending' && !deploy.running) scheduleDeploy(0);
+  res.set('Cache-Control', 'no-store').json({ ok: true, videos, deploy: deploy.state });
+}));
+
 // ── 404 et erreurs ─────────────────────────────────────────────────────
 app.use('/api', (req, res) => res.status(404).json({ error: 'Route inconnue.' }));
-app.use((req, res) => res.status(404).type('html').send(render('404', {
-  path: req.path, title: 'Page introuvable ❅ BLACKSNOW', description: 'Cette page n\'existe pas.',
-})));
+app.use((req, res) => res.status(404).type('html').send(page404(req.path)));
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
@@ -888,6 +1043,10 @@ sweepUploads().catch(() => {});
 setInterval(() => sweepUploads().catch(() => {}), 6 * 3600e3).unref();
 refreshVideos().catch(() => {});
 setInterval(() => refreshVideos().catch(() => {}), 3600e3).unref();
+// Une publication par jour au minimum (événements passés), et au démarrage si besoin
+setInterval(() => { if (deploy.lastDay !== todayParis() && deploy.state !== 'pending' && !deploy.running) scheduleDeploy(0); }, 15 * 60e3).unref();
+if (deploy.lastDay !== todayParis()) scheduleDeploy(5000);
+if (DEPLOY_REPO && !ADMIN_URL) console.warn('⚠ ADMIN_URL vide : le lecteur d\'extraits ne marchera pas sur le site public.');
 
 app.listen(PORT, () => {
   console.log(`✔ Site : http://localhost:${PORT}   |   Admin : http://localhost:${PORT}/admin`);

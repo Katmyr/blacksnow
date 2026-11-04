@@ -150,6 +150,14 @@
   .social-label { font-size: 13px; color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   dialog { margin: auto; background: var(--panel); color: var(--txt); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: min(520px, 92vw); }
   dialog::backdrop { background: rgba(0,0,0,.7); }
+  .deploy-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--panel2); font-size: 13px; font-weight: 700; max-width: 320px; }
+  .deploy-pill span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .deploy-pill .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .deploy-pill.ok .dot { background: var(--ok); }
+  .deploy-pill.busy .dot { background: var(--warn); animation: blink 1s infinite; }
+  .deploy-pill.err { border-color: var(--err); color: var(--err); }
+  .deploy-pill.err .dot { background: var(--err); }
+  @keyframes blink { 50% { opacity: .3; } }
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel2); border: 1px solid var(--line); padding: 10px 18px; border-radius: 10px; z-index: 100; max-width: 92vw; }
   .toast.err { border-color: var(--err); color: var(--err); }
 </style>
@@ -182,7 +190,8 @@
         <button class="tab" role="tab" data-tab="videos">Vidéos</button>
       </nav>
       <div class="top-right">
-        <a class="btn small" href="/" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span> Voir le site</a>
+        <button class="deploy-pill" id="deploy-pill" title="État du site public"><span class="dot"></span><span id="deploy-txt">Site…</span></button>
+        <a class="btn small" id="site-link" href="/" target="_blank" rel="noopener"><span class="material-icons">open_in_new</span> Voir le site</a>
         <button class="btn small" id="logout"><span class="material-icons">logout</span></button>
       </div>
     </div>
@@ -315,7 +324,7 @@ function toast(msg, isErr) {
   setTimeout(() => t.remove(), isErr ? 5000 : 2500);
 }
 
-async function api(method, url, body) {
+let api = async function (method, url, body) {
   const isForm = body instanceof FormData;
   const headers = {};
   if (token) headers.Authorization = 'Bearer ' + token;
@@ -326,7 +335,7 @@ async function api(method, url, body) {
   if (res.status === 401 && !url.endsWith('/login')) { showLogin('Session expirée, reconnecte-toi.'); throw new Error(data.error || 'Non connecté'); }
   if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
   return data;
-}
+};
 
 function uploadWithProgress(url, form, onProgress) {
   return new Promise((resolve, reject) => {
@@ -925,7 +934,7 @@ function renderVideos() {
   const v = state.videos, s = state.settings;
   const items = v.items;
   const hero = s.hero;
-  const shownItems = items.filter(x => !x.short && !s.hiddenVideos.includes(x.id));
+  const shownItems = items.filter(x => !x.short && !s.hiddenVideos.includes(x.id)).slice(0, 6); // la page Vidéos en affiche 6 max
   const known = shownItems.some(x => x.id === hero.videoId);
   $('#hero-select').innerHTML = (known ? '' : `<option value="${esc(hero.videoId)}">Vidéo actuelle (${esc(items.find(x => x.id === hero.videoId)?.title || hero.videoId)})</option>`) +
     shownItems.map(x => `<option value="${esc(x.id)}">${esc(x.title || x.id)}</option>`).join('');
@@ -935,15 +944,16 @@ function renderVideos() {
   $('#hero-url').value = '';
 
   $('#v-info').textContent = v.updatedAt
-    ? `Synchronisée automatiquement toutes les heures · dernière mise à jour : ${new Date(v.updatedAt).toLocaleString('fr-FR')} · décoche une vidéo pour la masquer du site.`
+    ? `Synchronisée automatiquement toutes les heures · dernière mise à jour : ${new Date(v.updatedAt).toLocaleString('fr-FR')} · seules les 6 premières vidéos cochées (les plus récentes) apparaissent sur le site.`
     : 'Pas encore synchronisée avec YouTube : clique sur « Actualiser ».';
   $('#v-list').innerHTML = items.map(x => {
-    const shown = !x.short && !s.hiddenVideos.includes(x.id);
+    const checked = !x.short && !s.hiddenVideos.includes(x.id);
+    const shown = shownItems.some(y => y.id === x.id);
     return `<div class="vcard ${shown ? '' : 'off'}">
       <img src="https://i.ytimg.com/vi/${esc(x.id)}/mqdefault.jpg" alt="" loading="lazy">
       <div class="vb"><div class="vt">${esc(x.title || x.id)}</div>
-        <div class="vf"><span>${x.published ? new Date(x.published).toLocaleDateString('fr-FR') : ''}${x.short ? ' · Short (masqué)' : ''}</span>
-        ${x.short ? '' : `<label class="toggle"><input type="checkbox" data-vid="${esc(x.id)}" ${shown ? 'checked' : ''}> Affichée</label>`}</div></div></div>`;
+        <div class="vf"><span>${x.published ? new Date(x.published).toLocaleDateString('fr-FR') : ''}${x.short ? ' · Short (masqué)' : checked && !shown ? ' · hors limite' : ''}</span>
+        ${x.short ? '' : `<label class="toggle"><input type="checkbox" data-vid="${esc(x.id)}" ${checked ? 'checked' : ''}> Affichée</label>`}</div></div></div>`;
   }).join('') || '<p class="empty">Aucune vidéo.</p>';
   $$('[data-vid]').forEach(cb => cb.onchange = async () => {
     const hidden = new Set(state.settings.hiddenVideos);
@@ -976,6 +986,36 @@ $('#v-refresh').onclick = async () => {
 // ═══ Démarrage ═══
 $$('[data-new]').forEach(b => b.onclick = () => (b.dataset.new === 'members' ? membersEd : eventsEd).open(null));
 
+// ═══ État du site public (GitHub Pages) ═══
+let deployTimer = null;
+const ago = iso => { const m = Math.round((Date.now() - Date.parse(iso)) / 60000); return m < 1 ? 'à l\'instant' : m < 60 ? `il y a ${m} min` : m < 1440 ? `il y a ${Math.round(m / 60)} h` : `le ${new Date(iso).toLocaleDateString('fr-FR')}`; };
+async function pollDeploy() {
+  clearTimeout(deployTimer);
+  let d;
+  try { d = await api('GET', '/api/admin/deploy'); } catch { deployTimer = setTimeout(pollDeploy, 30000); return; }
+  const pill = $('#deploy-pill'), txt = $('#deploy-txt');
+  $('#site-link').href = d.remote ? d.siteUrl : '/';
+  const busy = d.state === 'pending' || d.state === 'building';
+  pill.className = 'deploy-pill ' + (busy ? 'busy' : d.state === 'error' ? 'err' : d.state === 'ok' || d.lastOkAt ? 'ok' : '');
+  txt.textContent = busy ? 'Mise en ligne…'
+    : d.state === 'error' ? 'Erreur de mise en ligne : cliquer pour réessayer'
+    : d.lastOkAt ? `Site à jour (${ago(d.lastOkAt)})` : 'Site jamais publié';
+  pill.title = d.message || '';
+  deployTimer = setTimeout(pollDeploy, busy ? 2000 : 30000);
+}
+$('#deploy-pill').onclick = async () => {
+  if (!confirm('Republier le site public maintenant ?')) return;
+  try { await api('POST', '/api/admin/deploy'); } catch (err) { toast(err.message, true); }
+  pollDeploy();
+};
+// après une action qui change le site public, rafraîchir vite la pastille
+const _api = api;
+api = async (method, url, body) => {
+  const r = await _api(method, url, body);
+  if (method !== 'GET' && !url.includes('/auth/') && !url.includes('/preview') && !url.endsWith('/upload')) setTimeout(pollDeploy, 300);
+  return r;
+};
+
 async function start() {
   try {
     const [members, events, gallery, settings, videos] = await Promise.all(
@@ -986,6 +1026,7 @@ async function start() {
   $('#members-editor').innerHTML = '<p class="editor-empty">Sélectionne un membre ou clique sur « Nouveau ».</p>';
   $('#events-editor').innerHTML = '<p class="editor-empty">Sélectionne un événement ou clique sur « Nouveau ».</p>';
   renderMembers(); renderEvents(); renderGalleryChips(); renderGallery(); renderVideos();
+  pollDeploy();
   let tab = 'members'; try { tab = localStorage.getItem('bs-admin-tab') || tab; } catch {}
   openTab(tab);
 }

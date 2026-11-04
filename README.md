@@ -25,11 +25,7 @@ Site : http://localhost:3000 · Admin : http://localhost:3000/admin
 ## Mettre à jour au quotidien
 Tout se fait dans `/admin`. Les modifications de membres et d'événements sont enregistrées automatiquement **en brouillon** et n'apparaissent sur le site qu'après un clic sur « Publier ». Contenu : membres (glisser pour l'ordre), photos de la galerie (taguer les membres présents), événements (passent seuls en « passés »), vidéo d'accueil + timecodes. La page Vidéos se synchronise seule avec la chaîne YouTube toutes les heures (bouton « Actualiser » sinon). Shorts masqués automatiquement.
 
-## Mise en ligne (ex. Alwaysdata)
-1. Créer un site de type **Node.js**, commande : `node server.js`, répertoire : le dossier du projet.
-2. Envoyer les fichiers (Git ou SFTP), puis en SSH : `npm install --omit=dev`.
-3. Variables d'environnement (dans l'interface) : `ADMIN_PASSWORD`, `SITE_URL=https://blacksnowdancecrew.fr`, `NODE_ENV=production`, `TRUST_PROXY=1`.
-4. DNS OVH : pointer `blacksnowdancecrew.fr` vers l'hébergeur (et retirer GitHub Pages).
-5. Google Search Console : ajouter le site et soumettre `https://blacksnowdancecrew.fr/sitemap.xml`.
+## Mise en ligne
+Le site public est fabriqué par le serveur et envoyé sur GitHub Pages à chaque publication. L'admin tourne sur Alwaysdata (offre gratuite). Tout est expliqué dans **PASSATION.md**.
 
-⚠ Ne jamais commiter `.env`, `data/` ni `public/uploads/` (déjà dans `.gitignore`). Sauvegarder ces deux dossiers de temps en temps : ce sont les contenus du site.
+⚠ Ne jamais commiter `.env`, `data/`, `public/uploads/` ni `_build/` (déjà dans `.gitignore`).

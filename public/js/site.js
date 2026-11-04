@@ -16,3 +16,4 @@
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => set(false)));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('active')) set(false); });
 })();
+

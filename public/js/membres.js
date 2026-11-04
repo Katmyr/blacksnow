@@ -143,7 +143,7 @@
     btn.classList.add('loading');
     try {
       if (!btn.dataset.src) {
-        const r = await fetch(`/api/preview/${btn.dataset.preview}`);
+        const r = await fetch(`${document.body.dataset.api || ''}/api/preview/${btn.dataset.preview}`);
         if (!r.ok) throw new Error();
         btn.dataset.src = (await r.json()).preview;
       }
